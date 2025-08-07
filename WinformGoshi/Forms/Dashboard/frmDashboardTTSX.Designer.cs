@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -106,7 +106,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(384, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(479, 30);
+            this.label1.Size = new System.Drawing.Size(783, 30);
             this.label1.TabIndex = 3;
             this.label1.Text = "BẢNG HIỂN THỊ THÔNG TIN SẢN XUẤT";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -119,7 +119,7 @@
             this.label2.ForeColor = System.Drawing.Color.MediumBlue;
             this.label2.Location = new System.Drawing.Point(462, 39);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(301, 30);
+            this.label2.Size = new System.Drawing.Size(605, 30);
             this.label2.TabIndex = 4;
             this.label2.Text = "生産情報表示画面";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -133,7 +133,7 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1283, 80);
+            this.panel1.Size = new System.Drawing.Size(1587, 80);
             this.panel1.TabIndex = 6;
             // 
             // pictureBox1
@@ -202,7 +202,7 @@
             this.panel2.Controls.Add(this.label3);
             this.panel2.Location = new System.Drawing.Point(12, 98);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1282, 542);
+            this.panel2.Size = new System.Drawing.Size(1586, 634);
             this.panel2.TabIndex = 7;
             // 
             // cbbCa
@@ -264,7 +264,7 @@
             this.lbTiLeChayChuyen.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTiLeChayChuyen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTiLeChayChuyen.ForeColor = System.Drawing.Color.Blue;
-            this.lbTiLeChayChuyen.Location = new System.Drawing.Point(1040, 314);
+            this.lbTiLeChayChuyen.Location = new System.Drawing.Point(1344, 374);
             this.lbTiLeChayChuyen.Name = "lbTiLeChayChuyen";
             this.lbTiLeChayChuyen.Size = new System.Drawing.Size(205, 35);
             this.lbTiLeChayChuyen.TabIndex = 47;
@@ -277,7 +277,7 @@
             this.lbTyLeHT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTyLeHT.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTyLeHT.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTyLeHT.Location = new System.Drawing.Point(1040, 280);
+            this.lbTyLeHT.Location = new System.Drawing.Point(1344, 340);
             this.lbTyLeHT.Name = "lbTyLeHT";
             this.lbTyLeHT.Size = new System.Drawing.Size(205, 35);
             this.lbTyLeHT.TabIndex = 46;
@@ -290,7 +290,7 @@
             this.label35.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label35.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label35.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(894, 314);
+            this.label35.Location = new System.Drawing.Point(1198, 374);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(147, 35);
             this.label35.TabIndex = 45;
@@ -303,7 +303,7 @@
             this.lbTiLeHoanThanh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTiLeHoanThanh.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTiLeHoanThanh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTiLeHoanThanh.Location = new System.Drawing.Point(894, 280);
+            this.lbTiLeHoanThanh.Location = new System.Drawing.Point(1198, 340);
             this.lbTiLeHoanThanh.Name = "lbTiLeHoanThanh";
             this.lbTiLeHoanThanh.Size = new System.Drawing.Size(147, 35);
             this.lbTiLeHoanThanh.TabIndex = 44;
@@ -316,7 +316,7 @@
             this.label33.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label33.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label33.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label33.Location = new System.Drawing.Point(894, 224);
+            this.label33.Location = new System.Drawing.Point(1198, 284);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(85, 57);
             this.label33.TabIndex = 43;
@@ -329,7 +329,7 @@
             this.lbTimePlanTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimePlanTotal.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimePlanTotal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimePlanTotal.Location = new System.Drawing.Point(1164, 224);
+            this.lbTimePlanTotal.Location = new System.Drawing.Point(1468, 284);
             this.lbTimePlanTotal.Name = "lbTimePlanTotal";
             this.lbTimePlanTotal.Size = new System.Drawing.Size(81, 29);
             this.lbTimePlanTotal.TabIndex = 42;
@@ -342,7 +342,7 @@
             this.lbTimeACTTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimeACTTotal.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimeACTTotal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimeACTTotal.Location = new System.Drawing.Point(1164, 252);
+            this.lbTimeACTTotal.Location = new System.Drawing.Point(1468, 312);
             this.lbTimeACTTotal.Name = "lbTimeACTTotal";
             this.lbTimeACTTotal.Size = new System.Drawing.Size(81, 29);
             this.lbTimeACTTotal.TabIndex = 41;
@@ -355,7 +355,7 @@
             this.lbTimePlanStart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimePlanStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimePlanStart.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimePlanStart.Location = new System.Drawing.Point(1040, 224);
+            this.lbTimePlanStart.Location = new System.Drawing.Point(1344, 284);
             this.lbTimePlanStart.Name = "lbTimePlanStart";
             this.lbTimePlanStart.Size = new System.Drawing.Size(63, 29);
             this.lbTimePlanStart.TabIndex = 40;
@@ -368,7 +368,7 @@
             this.lbTimePlanEnd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimePlanEnd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimePlanEnd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimePlanEnd.Location = new System.Drawing.Point(1102, 224);
+            this.lbTimePlanEnd.Location = new System.Drawing.Point(1406, 284);
             this.lbTimePlanEnd.Name = "lbTimePlanEnd";
             this.lbTimePlanEnd.Size = new System.Drawing.Size(63, 29);
             this.lbTimePlanEnd.TabIndex = 39;
@@ -381,7 +381,7 @@
             this.lbTimeACTStart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimeACTStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimeACTStart.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimeACTStart.Location = new System.Drawing.Point(1040, 252);
+            this.lbTimeACTStart.Location = new System.Drawing.Point(1344, 312);
             this.lbTimeACTStart.Name = "lbTimeACTStart";
             this.lbTimeACTStart.Size = new System.Drawing.Size(63, 29);
             this.lbTimeACTStart.TabIndex = 38;
@@ -394,7 +394,7 @@
             this.lbTimeACTEnd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbTimeACTEnd.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lbTimeACTEnd.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTimeACTEnd.Location = new System.Drawing.Point(1102, 252);
+            this.lbTimeACTEnd.Location = new System.Drawing.Point(1406, 312);
             this.lbTimeACTEnd.Name = "lbTimeACTEnd";
             this.lbTimeACTEnd.Size = new System.Drawing.Size(63, 29);
             this.lbTimeACTEnd.TabIndex = 37;
@@ -407,7 +407,7 @@
             this.label26.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label26.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label26.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label26.Location = new System.Drawing.Point(978, 252);
+            this.label26.Location = new System.Drawing.Point(1282, 312);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(63, 29);
             this.label26.TabIndex = 36;
@@ -420,7 +420,7 @@
             this.label25.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label25.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label25.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(978, 224);
+            this.label25.Location = new System.Drawing.Point(1282, 284);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(63, 29);
             this.label25.TabIndex = 35;
@@ -433,7 +433,7 @@
             this.label24.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label24.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label24.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(1164, 196);
+            this.label24.Location = new System.Drawing.Point(1468, 256);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(81, 29);
             this.label24.TabIndex = 34;
@@ -446,7 +446,7 @@
             this.label23.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label23.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label23.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(1102, 196);
+            this.label23.Location = new System.Drawing.Point(1406, 256);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(63, 29);
             this.label23.TabIndex = 33;
@@ -459,7 +459,7 @@
             this.label22.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label22.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label22.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(1040, 196);
+            this.label22.Location = new System.Drawing.Point(1344, 256);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(63, 29);
             this.label22.TabIndex = 32;
@@ -472,7 +472,7 @@
             this.label18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label18.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(894, 196);
+            this.label18.Location = new System.Drawing.Point(1198, 256);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(147, 29);
             this.label18.TabIndex = 31;
@@ -487,13 +487,13 @@
             this.columnHeader6,
             this.columnHeader7,
             this.columnHeader8});
-            this.LVKeHoachAndThucTe.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LVKeHoachAndThucTe.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LVKeHoachAndThucTe.FullRowSelect = true;
             this.LVKeHoachAndThucTe.GridLines = true;
             this.LVKeHoachAndThucTe.HideSelection = false;
-            this.LVKeHoachAndThucTe.Location = new System.Drawing.Point(751, 391);
+            this.LVKeHoachAndThucTe.Location = new System.Drawing.Point(867, 483);
             this.LVKeHoachAndThucTe.Name = "LVKeHoachAndThucTe";
-            this.LVKeHoachAndThucTe.Size = new System.Drawing.Size(493, 146);
+            this.LVKeHoachAndThucTe.Size = new System.Drawing.Size(681, 146);
             this.LVKeHoachAndThucTe.TabIndex = 25;
             this.LVKeHoachAndThucTe.UseCompatibleStateImageBehavior = false;
             this.LVKeHoachAndThucTe.View = System.Windows.Forms.View.Details;
@@ -520,19 +520,20 @@
             // 
             // LVDungThucTe
             // 
-            this.LVDungThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LVDungThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LVDungThucTe.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.LVDungThucTe.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LVDungThucTe.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LVDungThucTe.FullRowSelect = true;
             this.LVDungThucTe.GridLines = true;
             this.LVDungThucTe.HideSelection = false;
-            this.LVDungThucTe.Location = new System.Drawing.Point(34, 391);
+            this.LVDungThucTe.Location = new System.Drawing.Point(34, 483);
             this.LVDungThucTe.Name = "LVDungThucTe";
-            this.LVDungThucTe.Size = new System.Drawing.Size(478, 146);
+            this.LVDungThucTe.Size = new System.Drawing.Size(700, 146);
             this.LVDungThucTe.TabIndex = 24;
             this.LVDungThucTe.UseCompatibleStateImageBehavior = false;
             this.LVDungThucTe.View = System.Windows.Forms.View.Details;
@@ -540,22 +541,22 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "NỘI DUNG DỪNG CHUYỂN";
-            this.columnHeader1.Width = 237;
+            this.columnHeader1.Width = 355;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Start";
-            this.columnHeader2.Width = 83;
+            this.columnHeader2.Width = 107;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "End";
-            this.columnHeader3.Width = 80;
+            this.columnHeader3.Width = 98;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Total time";
-            this.columnHeader4.Width = 70;
+            this.columnHeader4.Width = 110;
             // 
             // lbTotalDIF
             // 
@@ -563,7 +564,7 @@
             this.lbTotalDIF.BackColor = System.Drawing.SystemColors.Control;
             this.lbTotalDIF.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalDIF.ForeColor = System.Drawing.Color.Red;
-            this.lbTotalDIF.Location = new System.Drawing.Point(1191, 138);
+            this.lbTotalDIF.Location = new System.Drawing.Point(1495, 158);
             this.lbTotalDIF.Name = "lbTotalDIF";
             this.lbTotalDIF.Size = new System.Drawing.Size(53, 42);
             this.lbTotalDIF.TabIndex = 22;
@@ -576,7 +577,7 @@
             this.lbTotalACT.BackColor = System.Drawing.SystemColors.Control;
             this.lbTotalACT.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTotalACT.ForeColor = System.Drawing.Color.MediumBlue;
-            this.lbTotalACT.Location = new System.Drawing.Point(1191, 94);
+            this.lbTotalACT.Location = new System.Drawing.Point(1495, 114);
             this.lbTotalACT.Name = "lbTotalACT";
             this.lbTotalACT.Size = new System.Drawing.Size(53, 42);
             this.lbTotalACT.TabIndex = 21;
@@ -588,7 +589,7 @@
             this.lbTotalPlan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTotalPlan.BackColor = System.Drawing.SystemColors.Control;
             this.lbTotalPlan.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTotalPlan.Location = new System.Drawing.Point(1191, 50);
+            this.lbTotalPlan.Location = new System.Drawing.Point(1495, 70);
             this.lbTotalPlan.Name = "lbTotalPlan";
             this.lbTotalPlan.Size = new System.Drawing.Size(53, 42);
             this.lbTotalPlan.TabIndex = 20;
@@ -600,7 +601,7 @@
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.BackColor = System.Drawing.Color.PowderBlue;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(1119, 138);
+            this.label19.Location = new System.Drawing.Point(1423, 158);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(72, 42);
             this.label19.TabIndex = 19;
@@ -612,7 +613,7 @@
             this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label20.BackColor = System.Drawing.Color.PowderBlue;
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(1119, 94);
+            this.label20.Location = new System.Drawing.Point(1423, 114);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(72, 42);
             this.label20.TabIndex = 18;
@@ -624,7 +625,7 @@
             this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label21.BackColor = System.Drawing.Color.PowderBlue;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(1119, 50);
+            this.label21.Location = new System.Drawing.Point(1423, 70);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(72, 42);
             this.label21.TabIndex = 17;
@@ -637,7 +638,7 @@
             this.lbDIF.BackColor = System.Drawing.SystemColors.Control;
             this.lbDIF.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDIF.ForeColor = System.Drawing.Color.Red;
-            this.lbDIF.Location = new System.Drawing.Point(1036, 138);
+            this.lbDIF.Location = new System.Drawing.Point(1340, 158);
             this.lbDIF.Name = "lbDIF";
             this.lbDIF.Size = new System.Drawing.Size(53, 42);
             this.lbDIF.TabIndex = 16;
@@ -650,7 +651,7 @@
             this.lbACT.BackColor = System.Drawing.SystemColors.Control;
             this.lbACT.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbACT.ForeColor = System.Drawing.Color.MediumBlue;
-            this.lbACT.Location = new System.Drawing.Point(1036, 94);
+            this.lbACT.Location = new System.Drawing.Point(1340, 114);
             this.lbACT.Name = "lbACT";
             this.lbACT.Size = new System.Drawing.Size(53, 42);
             this.lbACT.TabIndex = 15;
@@ -662,7 +663,7 @@
             this.lbPlan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPlan.BackColor = System.Drawing.SystemColors.Control;
             this.lbPlan.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPlan.Location = new System.Drawing.Point(1036, 50);
+            this.lbPlan.Location = new System.Drawing.Point(1340, 70);
             this.lbPlan.Name = "lbPlan";
             this.lbPlan.Size = new System.Drawing.Size(53, 42);
             this.lbPlan.TabIndex = 14;
@@ -674,7 +675,7 @@
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.BackColor = System.Drawing.Color.PowderBlue;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(955, 138);
+            this.label12.Location = new System.Drawing.Point(1259, 158);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(81, 42);
             this.label12.TabIndex = 13;
@@ -686,7 +687,7 @@
             this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label11.BackColor = System.Drawing.Color.PowderBlue;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(955, 94);
+            this.label11.Location = new System.Drawing.Point(1259, 114);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(81, 42);
             this.label11.TabIndex = 12;
@@ -698,7 +699,7 @@
             this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.BackColor = System.Drawing.Color.PowderBlue;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(955, 50);
+            this.label10.Location = new System.Drawing.Point(1259, 70);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(81, 42);
             this.label10.TabIndex = 11;
@@ -710,7 +711,7 @@
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(1167, 16);
+            this.label9.Location = new System.Drawing.Point(1459, 29);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(39, 15);
             this.label9.TabIndex = 10;
@@ -721,7 +722,7 @@
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(1068, 16);
+            this.label8.Location = new System.Drawing.Point(1360, 29);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(34, 15);
             this.label8.TabIndex = 9;
@@ -731,7 +732,7 @@
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3.BackColor = System.Drawing.Color.Red;
-            this.button3.Location = new System.Drawing.Point(1212, 9);
+            this.button3.Location = new System.Drawing.Point(1504, 22);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(33, 29);
             this.button3.TabIndex = 8;
@@ -741,7 +742,7 @@
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.BackColor = System.Drawing.Color.SpringGreen;
-            this.button2.Location = new System.Drawing.Point(1108, 9);
+            this.button2.Location = new System.Drawing.Point(1400, 22);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(33, 29);
             this.button2.TabIndex = 7;
@@ -751,9 +752,8 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.BackColor = System.Drawing.Color.Yellow;
-            this.button1.BackgroundImage = global::WinformGoshi.Properties.Resources.back_button;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(1003, 9);
+            this.button1.Location = new System.Drawing.Point(1295, 22);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(33, 29);
             this.button1.TabIndex = 6;
@@ -764,45 +764,45 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.Name = "ChartArea1";
-            chartArea1.Position.Auto = false;
-            chartArea1.Position.Height = 94F;
-            chartArea1.Position.Width = 100F;
-            chartArea1.Position.Y = 3F;
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
-            legend1.Name = "Legend1";
-            legend1.Position.Auto = false;
-            legend1.Position.Height = 17.99308F;
-            legend1.Position.Width = 11.39073F;
-            legend1.Position.X = 13F;
-            legend1.Position.Y = 3F;
-            this.chart1.Legends.Add(legend1);
+            chartArea2.AxisY.MajorGrid.Enabled = false;
+            chartArea2.Name = "ChartArea1";
+            chartArea2.Position.Auto = false;
+            chartArea2.Position.Height = 94F;
+            chartArea2.Position.Width = 100F;
+            chartArea2.Position.Y = 3F;
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
+            legend2.Name = "Legend1";
+            legend2.Position.Auto = false;
+            legend2.Position.Height = 17.99308F;
+            legend2.Position.Width = 11.39073F;
+            legend2.Position.X = 13F;
+            legend2.Position.Y = 3F;
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(3, 40);
             this.chart1.Name = "chart1";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.Blue;
-            series1.Legend = "Legend1";
-            series1.Name = "PLAN";
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Color = System.Drawing.Color.Green;
-            series2.Legend = "Legend1";
-            series2.Name = "ACT";
-            series3.BorderWidth = 2;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.Red;
-            series3.Legend = "Legend1";
-            series3.Name = "SỰ CỐ";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Size = new System.Drawing.Size(885, 345);
+            series4.BorderWidth = 2;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Blue;
+            series4.Legend = "Legend1";
+            series4.Name = "PLAN";
+            series5.BorderWidth = 2;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Color = System.Drawing.Color.Green;
+            series5.Legend = "Legend1";
+            series5.Name = "ACT";
+            series6.BorderWidth = 2;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Color = System.Drawing.Color.Red;
+            series6.Legend = "Legend1";
+            series6.Name = "SỰ CỐ";
+            this.chart1.Series.Add(series4);
+            this.chart1.Series.Add(series5);
+            this.chart1.Series.Add(series6);
+            this.chart1.Size = new System.Drawing.Size(1189, 437);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
             // 
@@ -864,7 +864,7 @@
             // frmDashboardTTSX
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1307, 641);
+            this.ClientSize = new System.Drawing.Size(1611, 733);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "frmDashboardTTSX";

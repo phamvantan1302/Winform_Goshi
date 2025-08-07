@@ -59,7 +59,7 @@ namespace WinformGoshi.Forms.Dashboard
             loaddata(null, null);
             tRefreshData = new System.Windows.Forms.Timer();
             tRefreshData.Tick += new EventHandler(loaddata);
-            tRefreshData.Interval = 30000;
+            tRefreshData.Interval = 15000;
             tRefreshData.Enabled = true;
             
         }
@@ -265,7 +265,7 @@ namespace WinformGoshi.Forms.Dashboard
             {
                 var tsStart = TimeSpan.Parse(item.start);
                 var tsEnd = TimeSpan.Parse(item.end);
-                var tscheck = TimeSpan.Parse("18:00:00");
+                var tscheck = TimeSpan.Parse("18:01:00");
 
                 DateTime start = curDay.Date.Add(tsStart);
                 DateTime end = curDay.Date.Add(tsEnd);
@@ -308,7 +308,7 @@ namespace WinformGoshi.Forms.Dashboard
 
                 var tsStart = TimeSpan.Parse(item.start);
                 var tsEnd = TimeSpan.Parse(item.end);
-                var tscheck = TimeSpan.Parse("18:00:00");
+                var tscheck = TimeSpan.Parse("18:01:00");
 
                 DateTime start = curDay.Date.Add(tsStart);
                 DateTime end = curDay.Date.Add(tsEnd);
@@ -748,8 +748,8 @@ namespace WinformGoshi.Forms.Dashboard
                     Interval = 0,
                     IntervalOffset = pos,
                     StripWidth = 0,
-                    BorderColor = Color.Black,
-                    BorderDashStyle = ChartDashStyle.Dash,
+                    BorderColor = Color.FromArgb(80, Color.Black),
+                    BorderDashStyle = ChartDashStyle.Dot,
                     BorderWidth = 1
                 };
                 axisX1.StripLines.Add(strip);
@@ -776,7 +776,7 @@ namespace WinformGoshi.Forms.Dashboard
                     IntervalOffset = pos,
                     StripWidth = 0,
                     BorderColor = Color.Black,
-                    BorderDashStyle = ChartDashStyle.Dash,
+                    BorderDashStyle = ChartDashStyle.Dot,
                     BorderWidth = 1
                 };
                 chart1.ChartAreas[0].AxisX.StripLines.Add(strip);
@@ -825,7 +825,10 @@ namespace WinformGoshi.Forms.Dashboard
 
             try
             {
-                lbPlan.Text = Math.Round((counttime - timedungKH) / timeCT, 0).ToString();
+                if (DateTime.Now > timebd)
+                    lbPlan.Text = Math.Round((counttime - timedungKH) / timeCT, 0).ToString();
+                else
+                    lbPlan.Text = "0";
                 double.TryParse(lbACT.Text, out sllbact);
                 double.TryParse(lbPlan.Text, out sllbPlan);
                 lbDIF.Text = (sllbact - sllbPlan).ToString();
@@ -861,19 +864,21 @@ namespace WinformGoshi.Forms.Dashboard
                 lbTimePlanEnd.Text = timekt.ToString("HH:mm");
                 lbTimePlanTotal.Text = (timekt - timebd).TotalMinutes.ToString() + "'";
                 lbTimeACTTotal.Text = Math.Round((sumtimeact / 60), 0).ToString() + "'";
-                if (Math.Round((sumtimeact / 60), 0) > (timekt - timebd).TotalMinutes)
-                    lbTyLeHT.Text = "Không đạt";
-                else
-                    lbTyLeHT.Text = "Đạt";
+                
                 
                 if (DateTime.Now >= timekt)
                 {
                     double a = (timekt - timebd).TotalMinutes - 60;
                     lbTiLeChayChuyen.Text = Math.Round(((a - (timedungByPhut - 60)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
+                    if (Math.Round((sumtimeact / 60), 0) > (timekt - timebd).TotalMinutes)
+                        lbTyLeHT.Text = "Không đạt";
+                    else
+                        lbTyLeHT.Text = "Đạt";
                 }
                 else
                 {
                     lbTiLeChayChuyen.Text = "";
+                    lbTyLeHT.Text = "";
                 }
             }
             catch(Exception ex) { }
