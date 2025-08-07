@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinformGoshi", "WinformGoshi\WinformGoshi.csproj", "{09500D21-FB54-454A-B0BB-6B7E1B819EC0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "setupGS", "setupGS\setupGS.vdproj", "{D76FDAA9-1AA5-4352-AD13-2F7D8AA604FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09500D21-FB54-454A-B0BB-6B7E1B819EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09500D21-FB54-454A-B0BB-6B7E1B819EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09500D21-FB54-454A-B0BB-6B7E1B819EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09500D21-FB54-454A-B0BB-6B7E1B819EC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76FDAA9-1AA5-4352-AD13-2F7D8AA604FE}.Debug|Any CPU.ActiveCfg = Debug
+		{D76FDAA9-1AA5-4352-AD13-2F7D8AA604FE}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD582DB0-F0B7-4FF6-A3DC-91E8FD1745E4}
+	EndGlobalSection
+EndGlobal
