@@ -471,7 +471,7 @@ namespace WinformGoshi.Forms.Dashboard
                 sumtimeact = 0;
                 dMShowChart.end = lsstatus.FirstOrDefault().created_at.ToString("HH:mm");
                 dschart.Add(dMShowChart);
-                for (int i = 1; i < lsstatus.Count; i++)
+                for (int i = 0; i < lsstatus.Count; i++)
                 {
                     if (lsstatus[i].status == "MAY_DUNG")
                     {
