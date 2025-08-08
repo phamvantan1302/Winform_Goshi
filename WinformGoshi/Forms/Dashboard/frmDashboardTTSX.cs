@@ -206,7 +206,7 @@ namespace WinformGoshi.Forms.Dashboard
                         dMShowChart.slend = dMShowChart.slstart;
                         dschart.Add(dMShowChart);
 
-                        //máy chay
+                        //máy chay sau khi dung
                         if(dMShowChart.end != kthuc)
                         {
                             dMShowChart = new DMShowChart()
@@ -287,12 +287,6 @@ namespace WinformGoshi.Forms.Dashboard
                 {
                     start = curDay.Date.Add(tsStart);
                 }
-                //if (prevTime.HasValue && start < prevTime.Value)
-                //{
-                //    curDay = curDay.AddDays(1);
-                //    start = curDay.Add(tsStart);
-                //    end = tsEnd < tsStart ? curDay.AddDays(1).Add(tsEnd) : curDay.Add(tsEnd);
-                //}
 
                 timePoints.Add(start);
                 timePoints.Add(end);
@@ -330,37 +324,6 @@ namespace WinformGoshi.Forms.Dashboard
                 {
                     start = curDay.Date.Add(tsStart);
                 }
-                //if (prevTime.HasValue && start < prevTime.Value)
-                //{
-                //    curDay = curDay.AddDays(1);
-                //    start = curDay.Add(tsStart);
-                //    end = tsEnd < tsStart ? curDay.AddDays(1).Add(tsEnd) : curDay.Add(tsEnd);
-                //}
-
-                //TimeSpan tsStart = TimeSpan.Parse(item.start);
-                //TimeSpan tsEnd = TimeSpan.Parse(item.end);
-                //var cutoff = new TimeSpan(23, 59, 0);
-
-                //DateTime startTime, endTime;
-
-                //if (tsEnd < tsStart)
-                //{
-                //    // Qua ngày → start lùi 1 ngày, end giữ nguyên
-                //    startTime = today.AddDays(-1).Add(tsStart);
-                //    endTime = today.Add(tsEnd);
-                //}
-                //else if (tsStart < cutoff && tsEnd < cutoff && timebd.Date != timekt.Date)
-                //{
-                //    // Cả hai đều < 23:59 và không qua ngày → lùi cả hai
-                //    startTime = today.AddDays(-1).Add(tsStart);
-                //    endTime = today.AddDays(-1).Add(tsEnd);
-                //}
-                //else
-                //{
-                //    // Các trường hợp còn lại → giữ nguyên
-                //    startTime = today.Add(tsStart);
-                //    endTime = today.Add(tsEnd);
-                //}
 
                 planSeries.Points.AddXY(start.ToOADate(), item.slstart);
                 planSeries.Points.AddXY(end.ToOADate(), item.slend);
@@ -392,22 +355,27 @@ namespace WinformGoshi.Forms.Dashboard
                     shifttimetableexception_name = lsstatus1[0].shifttimetableexception_name
                 };
                 lsstatus.Add(dmstatus);
-                for (int i = 0; i < lsstatus1.Count - 1; i++)
+                for (int i = 0; i < lsstatus1.Count; i++)
                 {
                     var current = lsstatus1[i];
-                    var next = lsstatus1[i + 1];
+                    var next = lsstatus1[i];
+                    if(i != lsstatus1.Count - 1)
+                        next = lsstatus1[i + 1];
 
                     // Trường hợp MAY_DUNG kéo dài hơn 2 phút
                     if (current.status == "MAY_DUNG")
                     {
                         var duration = (next.created_at - current.created_at).TotalSeconds;
 
-                        if (duration > 120)
+                        if (duration == 0 && DateTime.Now < timekt)
+                        {
+                            duration = (DateTime.Now - current.created_at).TotalSeconds;
+                        }
+
+                        if (duration > 300)
                         {
                             // Thêm trạng thái MAY_DUNG
                             lsstatus.Add(CloneStatus(current));
-
-                            
 
                             // Nếu trạng thái tiếp theo là MAY_CHAY thì thêm nó để đánh dấu kết thúc
                             if (next.status == "MAY_CHAY")
@@ -808,7 +776,9 @@ namespace WinformGoshi.Forms.Dashboard
                     else if (DateTime.Now >= getTimeCa[i].fromdate && DateTime.Now <= getTimeCa[i].todate)
                     {
                         timedungKH += (DateTime.Now - getTimeCa[i].fromdate).TotalSeconds;
-                    }else if (DateTime.Now >= getTimeCa[i].todate)
+                        break;
+                    }
+                    else if (DateTime.Now >= getTimeCa[i].todate)
                     {
                         timedungKH += (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalSeconds;
                     }

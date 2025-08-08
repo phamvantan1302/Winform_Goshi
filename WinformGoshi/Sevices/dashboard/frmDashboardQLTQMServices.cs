@@ -162,6 +162,51 @@ namespace WinformGoshi.Sevices.dashboard
             return ret;
         }
 
+        public static List<DMCounterinfo> getSLByNgay(DateTime fromDate, DateTime toDate)
+        {
+            string sql = "";
+            List<DMCounterinfo> ret = new List<DMCounterinfo>();
+            DMCounterinfo item;
+            try
+            {
+                sql = "select id, machinecode, quantity, counter, created_at " +
+                      " from productioncounting_counterinfo " +
+                      " where created_at >= (" +
+                      " select min(created_at) " +
+                      " from productioncounting_counterinfo " +
+                      " where 1=1 " +
+                      " and quantity = 0 " +
+                      " and created_at >= '" + fromDate.ToString("yyyy-MM-dd HH:mm:ss") + "' " +
+                      " and created_at < '" + toDate.ToString("yyyy-MM-dd HH:mm:ss") + "' " +
+                      ") " +
+                      " and created_at <= '" + toDate.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                sql += " order by created_at ";
+                using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            item = new DMCounterinfo()
+                            {
+                                id = reader.GetInt32(0),
+                                machinecode = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                                quantity = reader.GetDouble(2),
+                                counter = reader.GetDouble(3),
+                                created_at = reader.GetDateTime(4),
+                            };
+                            ret.Add(item);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return ret;
+        }
+
         public static List<DMOrder> getDataOrder(DateTime date)
         {
             string sql = "";
@@ -171,11 +216,11 @@ namespace WinformGoshi.Sevices.dashboard
             DMOrder item;
             try
             {
-                sql = "select t0.id, t0.plannedquantity, t0.startdate, t0.shift_id " +
+                sql = "select t0.id, t0.plannedquantity, t0.finishdate, t0.shift_id " +
                 " from orders_order t0" +
-                " where t0.startdate >= '" + fromDate.ToString("yyyy-MM-dd") + "' " +
-                " and t0.startdate < '" + toDate.ToString("yyyy-MM-dd") + "' ";
-                sql += " order by t0.startdate";
+                " where t0.finishdate >= '" + fromDate.ToString("yyyy-MM-dd") + "' " +
+                " and t0.finishdate < '" + toDate.ToString("yyyy-MM-dd") + "' ";
+                sql += " order by t0.finishdate";
                 using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
                 {
                     using (var reader = command.ExecuteReader())

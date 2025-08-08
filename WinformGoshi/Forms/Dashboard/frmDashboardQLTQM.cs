@@ -65,6 +65,9 @@ namespace WinformGoshi.Forms.Dashboard
             chart1.ChartAreas[0].AxisY2.Minimum = 0;
             chart1.ChartAreas[0].AxisY2.Maximum = 150;
 
+            chart1.ChartAreas[0].AxisY.Minimum = 0;
+            chart1.ChartAreas[0].AxisY.Maximum = 150;
+
             chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisX.Maximum = 31;
             chart1.ChartAreas[0].AxisX.Interval = 1;
@@ -103,7 +106,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 timekt = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, ktTime.Hour, ktTime.Minute, 0);
                                 if (ktTime < bdTime)
                                 {
-                                    timekt = timekt.AddDays(1);
+                                    timebd = timebd.AddDays(-1);
                                 }
                                 sumtimeca += (timekt - timebd).TotalSeconds;
 
@@ -116,16 +119,18 @@ namespace WinformGoshi.Forms.Dashboard
                                     if (listTrongNgay[i].status == "MAY_CHAY")
                                     {
                                         if (i + 1 == listTrongNgay.Count)
-                                            sumtimeact = (DateTime.Now - listTrongNgay[i].created_at).TotalSeconds + sumtimeact;
+                                        {
+                                            if (DateTime.Now < timekt)
+                                            {
+                                                sumtimeact = (DateTime.Now - listTrongNgay[i].created_at).TotalSeconds + sumtimeact;
+                                            }
+                                        }
                                         else
                                             sumtimeact = (listTrongNgay[i + 1].created_at - listTrongNgay[i].created_at).TotalSeconds + sumtimeact;
                                     }
                                 }
 
-                                var listSLTrongNgay = lscounter
-                                    .Where(x => x.created_at >= timebd && x.created_at <= timekt)
-                                    .OrderBy(x => x.created_at)
-                                    .ToList();
+                                var listSLTrongNgay = frmDashboardQLTQMServices.getSLByNgay(timebd, timekt);
                                 if(listSLTrongNgay.Count > 0)
                                     slTTtrongngay += listSLTrongNgay.LastOrDefault().quantity;
                             }
