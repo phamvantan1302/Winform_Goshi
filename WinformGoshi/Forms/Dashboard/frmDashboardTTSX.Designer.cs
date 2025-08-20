@@ -28,16 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.dgvKeHoachAndThucTe = new System.Windows.Forms.DataGridView();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDungThucTe = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label13 = new System.Windows.Forms.Label();
             this.cbbCa = new System.Windows.Forms.ComboBox();
             this.cbbModel = new System.Windows.Forms.ComboBox();
             this.cbbChuyen = new System.Windows.Forms.ComboBox();
@@ -60,16 +73,6 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.LVKeHoachAndThucTe = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.LVDungThucTe = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lbTotalDIF = new System.Windows.Forms.Label();
             this.lbTotalACT = new System.Windows.Forms.Label();
             this.lbTotalPlan = new System.Windows.Forms.Label();
@@ -84,9 +87,9 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.btnRun = new System.Windows.Forms.Button();
+            this.btnMD = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -96,6 +99,8 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvKeHoachAndThucTe)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungThucTe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -153,6 +158,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.dgvKeHoachAndThucTe);
+            this.panel2.Controls.Add(this.dgvDungThucTe);
+            this.panel2.Controls.Add(this.label13);
             this.panel2.Controls.Add(this.cbbCa);
             this.panel2.Controls.Add(this.cbbModel);
             this.panel2.Controls.Add(this.cbbChuyen);
@@ -175,8 +183,6 @@
             this.panel2.Controls.Add(this.label23);
             this.panel2.Controls.Add(this.label22);
             this.panel2.Controls.Add(this.label18);
-            this.panel2.Controls.Add(this.LVKeHoachAndThucTe);
-            this.panel2.Controls.Add(this.LVDungThucTe);
             this.panel2.Controls.Add(this.lbTotalDIF);
             this.panel2.Controls.Add(this.lbTotalACT);
             this.panel2.Controls.Add(this.lbTotalPlan);
@@ -191,9 +197,9 @@
             this.panel2.Controls.Add(this.label10);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.btnStop);
+            this.panel2.Controls.Add(this.btnRun);
+            this.panel2.Controls.Add(this.btnMD);
             this.panel2.Controls.Add(this.chart1);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
@@ -204,6 +210,116 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1586, 634);
             this.panel2.TabIndex = 7;
+            // 
+            // dgvKeHoachAndThucTe
+            // 
+            this.dgvKeHoachAndThucTe.AllowUserToAddRows = false;
+            this.dgvKeHoachAndThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvKeHoachAndThucTe.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvKeHoachAndThucTe.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvKeHoachAndThucTe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvKeHoachAndThucTe.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column5,
+            this.Column6,
+            this.Column7,
+            this.Column8});
+            this.dgvKeHoachAndThucTe.Location = new System.Drawing.Point(898, 477);
+            this.dgvKeHoachAndThucTe.Name = "dgvKeHoachAndThucTe";
+            this.dgvKeHoachAndThucTe.ReadOnly = true;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvKeHoachAndThucTe.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvKeHoachAndThucTe.RowHeadersVisible = false;
+            this.dgvKeHoachAndThucTe.Size = new System.Drawing.Size(651, 145);
+            this.dgvKeHoachAndThucTe.TabIndex = 55;
+            this.dgvKeHoachAndThucTe.SelectionChanged += new System.EventHandler(this.dgvKeHoachAndThucTe_SelectionChanged);
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "NỘI DUNG";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column6.HeaderText = "PLAN (Phút)";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column7.HeaderText = "ACT (Phút)";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            // 
+            // Column8
+            // 
+            this.Column8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column8.HeaderText = "DIF";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            // 
+            // dgvDungThucTe
+            // 
+            this.dgvDungThucTe.AllowUserToAddRows = false;
+            this.dgvDungThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvDungThucTe.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvDungThucTe.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvDungThucTe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDungThucTe.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4});
+            this.dgvDungThucTe.Location = new System.Drawing.Point(34, 477);
+            this.dgvDungThucTe.Name = "dgvDungThucTe";
+            this.dgvDungThucTe.RowHeadersVisible = false;
+            this.dgvDungThucTe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvDungThucTe.Size = new System.Drawing.Size(761, 145);
+            this.dgvDungThucTe.TabIndex = 54;
+            this.dgvDungThucTe.SelectionChanged += new System.EventHandler(this.dgvDungThucTe_SelectionChanged);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "NỘI DUNG DỪNG CHUYỀN";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column2.HeaderText = "Start";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column3.HeaderText = "End";
+            this.Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Column4.HeaderText = "Total time";
+            this.Column4.Name = "Column4";
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(1255, 29);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(31, 15);
+            this.label13.TabIndex = 53;
+            this.label13.Text = "Wait";
             // 
             // cbbCa
             // 
@@ -479,85 +595,6 @@
             this.label18.Text = "CONTENT";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // LVKeHoachAndThucTe
-            // 
-            this.LVKeHoachAndThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LVKeHoachAndThucTe.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader8});
-            this.LVKeHoachAndThucTe.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LVKeHoachAndThucTe.FullRowSelect = true;
-            this.LVKeHoachAndThucTe.GridLines = true;
-            this.LVKeHoachAndThucTe.HideSelection = false;
-            this.LVKeHoachAndThucTe.Location = new System.Drawing.Point(867, 483);
-            this.LVKeHoachAndThucTe.Name = "LVKeHoachAndThucTe";
-            this.LVKeHoachAndThucTe.Size = new System.Drawing.Size(681, 146);
-            this.LVKeHoachAndThucTe.TabIndex = 25;
-            this.LVKeHoachAndThucTe.UseCompatibleStateImageBehavior = false;
-            this.LVKeHoachAndThucTe.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "NỘI DUNG";
-            this.columnHeader5.Width = 237;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "PLAN (Phút)";
-            this.columnHeader6.Width = 89;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "ACT (Phút)";
-            this.columnHeader7.Width = 86;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "DIF";
-            this.columnHeader8.Width = 75;
-            // 
-            // LVDungThucTe
-            // 
-            this.LVDungThucTe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LVDungThucTe.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
-            this.LVDungThucTe.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LVDungThucTe.FullRowSelect = true;
-            this.LVDungThucTe.GridLines = true;
-            this.LVDungThucTe.HideSelection = false;
-            this.LVDungThucTe.Location = new System.Drawing.Point(34, 483);
-            this.LVDungThucTe.Name = "LVDungThucTe";
-            this.LVDungThucTe.Size = new System.Drawing.Size(700, 146);
-            this.LVDungThucTe.TabIndex = 24;
-            this.LVDungThucTe.UseCompatibleStateImageBehavior = false;
-            this.LVDungThucTe.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "NỘI DUNG DỪNG CHUYỂN";
-            this.columnHeader1.Width = 355;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Start";
-            this.columnHeader2.Width = 107;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "End";
-            this.columnHeader3.Width = 98;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Total time";
-            this.columnHeader4.Width = 110;
-            // 
             // lbTotalDIF
             // 
             this.lbTotalDIF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -713,9 +750,9 @@
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(1459, 29);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(39, 15);
+            this.label9.Size = new System.Drawing.Size(34, 15);
             this.label9.TabIndex = 10;
-            this.label9.Text = "STOP";
+            this.label9.Text = "Error";
             // 
             // label8
             // 
@@ -724,84 +761,91 @@
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(1360, 29);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(34, 15);
+            this.label8.Size = new System.Drawing.Size(30, 15);
             this.label8.TabIndex = 9;
-            this.label8.Text = "RUN";
+            this.label8.Text = "Run";
             // 
-            // button3
+            // btnStop
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.BackColor = System.Drawing.Color.Red;
-            this.button3.Location = new System.Drawing.Point(1504, 22);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(33, 29);
-            this.button3.TabIndex = 8;
-            this.button3.UseVisualStyleBackColor = false;
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStop.BackColor = System.Drawing.Color.Red;
+            this.btnStop.Location = new System.Drawing.Point(1504, 22);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(33, 29);
+            this.btnStop.TabIndex = 8;
+            this.btnStop.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btnRun
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackColor = System.Drawing.Color.SpringGreen;
-            this.button2.Location = new System.Drawing.Point(1400, 22);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(33, 29);
-            this.button2.TabIndex = 7;
-            this.button2.UseVisualStyleBackColor = false;
+            this.btnRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRun.BackColor = System.Drawing.Color.SpringGreen;
+            this.btnRun.Location = new System.Drawing.Point(1400, 22);
+            this.btnRun.Name = "btnRun";
+            this.btnRun.Size = new System.Drawing.Size(33, 29);
+            this.btnRun.TabIndex = 7;
+            this.btnRun.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btnMD
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.Color.Yellow;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(1295, 22);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(33, 29);
-            this.button1.TabIndex = 6;
-            this.button1.UseVisualStyleBackColor = false;
+            this.btnMD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMD.BackColor = System.Drawing.Color.Yellow;
+            this.btnMD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMD.Location = new System.Drawing.Point(1295, 22);
+            this.btnMD.Name = "btnMD";
+            this.btnMD.Size = new System.Drawing.Size(33, 29);
+            this.btnMD.TabIndex = 6;
+            this.btnMD.UseVisualStyleBackColor = false;
             // 
             // chart1
             // 
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.AxisY.MajorGrid.Enabled = false;
-            chartArea2.Name = "ChartArea1";
-            chartArea2.Position.Auto = false;
-            chartArea2.Position.Height = 94F;
-            chartArea2.Position.Width = 100F;
-            chartArea2.Position.Y = 3F;
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
-            legend2.Name = "Legend1";
-            legend2.Position.Auto = false;
-            legend2.Position.Height = 17.99308F;
-            legend2.Position.Width = 11.39073F;
-            legend2.Position.X = 13F;
-            legend2.Position.Y = 3F;
-            this.chart1.Legends.Add(legend2);
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.Name = "ChartArea1";
+            chartArea1.Position.Auto = false;
+            chartArea1.Position.Height = 94F;
+            chartArea1.Position.Width = 100F;
+            chartArea1.Position.Y = 3F;
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
+            legend1.Name = "Legend1";
+            legend1.Position.Auto = false;
+            legend1.Position.Height = 17.99308F;
+            legend1.Position.Width = 11.39073F;
+            legend1.Position.X = 13F;
+            legend1.Position.Y = 3F;
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(3, 40);
             this.chart1.Name = "chart1";
+            series1.BorderWidth = 2;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Color = System.Drawing.Color.Blue;
+            series1.Legend = "Legend1";
+            series1.Name = "PLAN";
+            series2.BorderWidth = 2;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Color = System.Drawing.Color.Green;
+            series2.Legend = "Legend1";
+            series2.Name = "ACT";
+            series3.BorderWidth = 2;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Color = System.Drawing.Color.Red;
+            series3.Legend = "Legend1";
+            series3.Name = "SỰ CỐ";
             series4.BorderWidth = 2;
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Color = System.Drawing.Color.Blue;
+            series4.Color = System.Drawing.Color.Orange;
             series4.Legend = "Legend1";
-            series4.Name = "PLAN";
-            series5.BorderWidth = 2;
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Color = System.Drawing.Color.Green;
-            series5.Legend = "Legend1";
-            series5.Name = "ACT";
-            series6.BorderWidth = 2;
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Color = System.Drawing.Color.Red;
-            series6.Legend = "Legend1";
-            series6.Name = "SỰ CỐ";
+            series4.Name = "MÁY DỪNG";
+            this.chart1.Series.Add(series1);
+            this.chart1.Series.Add(series2);
+            this.chart1.Series.Add(series3);
             this.chart1.Series.Add(series4);
-            this.chart1.Series.Add(series5);
-            this.chart1.Series.Add(series6);
             this.chart1.Size = new System.Drawing.Size(1189, 437);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
@@ -875,6 +919,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvKeHoachAndThucTe)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDungThucTe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 
@@ -894,9 +940,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.Button btnRun;
+        private System.Windows.Forms.Button btnMD;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lbPlan;
@@ -910,16 +956,6 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label lbDIF;
         private System.Windows.Forms.Label lbACT;
-        private System.Windows.Forms.ListView LVKeHoachAndThucTe;
-        private System.Windows.Forms.ListView LVDungThucTe;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label24;
@@ -942,5 +978,16 @@
         private System.Windows.Forms.ComboBox cbbChuyen;
         private System.Windows.Forms.ComboBox cbbModel;
         private System.Windows.Forms.ComboBox cbbCa;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.DataGridView dgvKeHoachAndThucTe;
+        private System.Windows.Forms.DataGridView dgvDungThucTe;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
     }
 }

@@ -35,7 +35,7 @@ namespace WinformGoshi.Sevices.dashboard
             try
             {
                 sql = " select t0.id, t0.name, t0.mondayhours, t0.tuesdayhours, t0.wensdayhours, t0.thursdayhours, " +
-                    " t0.fridayhours, t0.saturdayhours, t0.sundayhours, t2.name, t2.fromdate, t2.todate, t2.type " +
+                    " t0.fridayhours, t0.saturdayhours, t0.sundayhours, t2.name, t2.fromdate, t2.todate, t2.type, t2.id " +
                     " from basic_shift t0 " +
                     " left join jointable_shift_shifttimetableexception t1 on t0.id = t1.shift_id " +
                     " left join basic_shifttimetableexception t2 on t1.shifttimetableexception_id = t2.id " +
@@ -65,6 +65,7 @@ namespace WinformGoshi.Sevices.dashboard
                                 fromdate = reader.GetDateTime(10),
                                 todate = reader.GetDateTime(11),
                                 type = reader.IsDBNull(12) ? "" : reader.GetString(12),
+                                iddung = reader.GetInt32(13),
                             };
                             ret.Add(item);
                         }
@@ -254,12 +255,12 @@ namespace WinformGoshi.Sevices.dashboard
                 sql = "select id, machinecode, quantity, counter, created_at " +
                       " from productioncounting_counterinfo " +
                       " where created_at >= (" +
-                      "  select min(created_at) " +
+                      "  select max(created_at) " +
                       "  from productioncounting_counterinfo " +
                       "  where machinecode = '" + mm + "' " +
                       "  and quantity = 1 " +
-                      "  and created_at >= '" + fromdate + "' " +
-                      "  and created_at <= '" + todate + "'" +
+                      "  and created_at >= '" + fromdate.AddMinutes(-20) + "' " +
+                      "  and created_at <= '" + fromdate.AddHours(1) + "'" +
                       ") " +
                       " and created_at <= '" + todate + "' " +
                       " and machinecode = '" + mm + "'";
@@ -329,6 +330,36 @@ namespace WinformGoshi.Sevices.dashboard
                                 todate = reader.IsDBNull(10) ? DateTime.Now : reader.GetDateTime(10),
                             };
                             ret.Add(item);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return ret;
+        }
+
+        public static string getStatusinfo(string mm)
+        {
+            string sql = "";
+            string ret = "";
+            try
+            {
+                sql = " select id, machinecode, status, created_at, active " +
+                    " from productioncounting_iotstatusinfo " +
+                    " where active = true " +
+                    " and machinecode = '" + mm + "' " +
+                    " order by created_at desc " +
+                    " limit 1";
+                using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret = reader.IsDBNull(2) ? "" : reader.GetString(2);
                         }
                     }
                 }

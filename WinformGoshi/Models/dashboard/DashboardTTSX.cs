@@ -23,6 +23,7 @@ namespace WinformGoshi.Models.dashboard
             public DateTime fromdate { get; set; }
             public DateTime todate { get; set; }
             public string type {  get; set; }
+            public int iddung { get; set; }
         }
 
         public class DMShowChart

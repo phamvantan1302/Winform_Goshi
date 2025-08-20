@@ -54,18 +54,17 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1441, 93);
+            this.panel1.Size = new System.Drawing.Size(1622, 93);
             this.panel1.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(384, 9);
+            this.label1.Location = new System.Drawing.Point(510, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(405, 30);
+            this.label1.Size = new System.Drawing.Size(586, 30);
             this.label1.TabIndex = 3;
             this.label1.Text = "PHÂN TÍCH THỜI GIAN DỪNG CHUYỀN";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -74,12 +73,11 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Black", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label2.Location = new System.Drawing.Point(462, 39);
+            this.label2.Location = new System.Drawing.Point(588, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(261, 30);
+            this.label2.Size = new System.Drawing.Size(442, 30);
             this.label2.TabIndex = 4;
             this.label2.Text = "ライン不稼働時間分析";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -99,7 +97,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(698, 491);
+            this.chart1.Size = new System.Drawing.Size(774, 614);
             this.chart1.TabIndex = 8;
             this.chart1.Text = "chart1";
             title1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -115,14 +113,14 @@
             this.chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(716, 111);
+            this.chart2.Location = new System.Drawing.Point(848, 111);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart2.Series.Add(series2);
-            this.chart2.Size = new System.Drawing.Size(735, 491);
+            this.chart2.Size = new System.Drawing.Size(784, 614);
             this.chart2.TabIndex = 9;
             this.chart2.Text = "chart2";
             title2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -134,7 +132,7 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(1464, 614);
+            this.ClientSize = new System.Drawing.Size(1645, 737);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.panel1);
@@ -143,7 +141,6 @@
             this.Text = "Dashboard Phân tích thời gian dừng chuyền";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDashboardPTDung_FormClosing);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.ResumeLayout(false);

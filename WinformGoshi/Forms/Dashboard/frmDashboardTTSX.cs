@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using WinformGoshi.Sevices.dashboard;
+using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using static WinformGoshi.Models.dashboard.DashboardTTSX;
 
@@ -21,7 +22,9 @@ namespace WinformGoshi.Forms.Dashboard
     public partial class frmDashboardTTSX : Form
     {
         private System.Windows.Forms.Timer tRefreshData;
+        private System.Windows.Forms.Timer tRefreshDataD;
         private bool isFormClosing = false;
+        private bool checktb = true;
         public frmDashboardTTSX()        
         {
             InitializeComponent();
@@ -61,7 +64,13 @@ namespace WinformGoshi.Forms.Dashboard
             tRefreshData.Tick += new EventHandler(loaddata);
             tRefreshData.Interval = 15000;
             tRefreshData.Enabled = true;
-            
+
+            // load màu đèn
+            loadden(null, null);
+            tRefreshDataD = new System.Windows.Forms.Timer();
+            tRefreshDataD.Tick += new EventHandler(loadden);
+            tRefreshDataD.Interval = 500;
+            tRefreshDataD.Enabled = true;
         }
 
         private void clearform()
@@ -74,6 +83,46 @@ namespace WinformGoshi.Forms.Dashboard
             lbTotalDIF.Text = "0";
         }
 
+        private void loadden(object sender, EventArgs e)
+        {
+            string line = "0", mode = "0", mmtb = "", status = "";
+            int idca = 0;
+
+            if (cbbChuyen.SelectedValue != null)
+                line = cbbChuyen.SelectedValue.ToString();
+            if (cbbModel.SelectedValue != null)
+                mode = cbbModel.SelectedValue.ToString();
+            if (cbbCa.SelectedValue != null)
+                idca = int.Parse(cbbCa.SelectedValue.ToString());
+
+            mmtb = frmDashboardTTSXServices.getMMTB(dtpSearch.Value, line, mode);
+
+            status = frmDashboardTTSXServices.getStatusinfo(mmtb);
+            btnMD.BackColor = Color.White;
+            btnRun.BackColor = Color.White;
+            btnStop.BackColor = Color.White;
+            if (checktb)
+            {
+                checktb = false;
+            }
+            else
+            {
+                switch (status)
+                {
+                    case "MAY_CHAY":
+                        btnRun.BackColor = Color.Green;
+                        break;
+                    case "MAY_LOI":
+                        btnStop.BackColor = Color.Red;
+                        break;
+                    default:
+                        btnMD.BackColor = Color.Yellow;
+                        break;
+                }
+                checktb = true;
+            }
+        }
+
         private void loaddata(object sender, EventArgs e)
         {
             if (isFormClosing || chart1 == null || this.IsDisposed)
@@ -84,7 +133,6 @@ namespace WinformGoshi.Forms.Dashboard
             int idca = 0;
             DateTime timebd = DateTime.Now, timekt = DateTime.Now;
             double sumtime = 0, sumtimeact = 0, timestart = 0, timeend = 0, slsxkh = 0, timedung = 0, timeCT = 0, timedungByPhut = 0;
-            ListViewItem lv;
 
             if (cbbChuyen.SelectedValue != null)
                 line = cbbChuyen.SelectedValue.ToString();
@@ -342,30 +390,44 @@ namespace WinformGoshi.Forms.Dashboard
             List<DMStatusinfo> lsstatus = new List<DMStatusinfo>();
             if (lsstatus1.Count > 0)
             {
-                dmstatus = new DMStatusinfo()
-                {
-                    id = lsstatus1[0].id,
-                    machinecode = lsstatus1[0].machinecode,
-                    status = lsstatus1[0].status,
-                    created_at = lsstatus1[0].created_at,
-                    error_code = lsstatus1[0].error_code,
-                    stoppagereason_id = lsstatus1[0].stoppagereason_id,
-                    shifttimetableexception_id = lsstatus1[0].shifttimetableexception_id,
-                    stop_name = lsstatus1[0].stop_name,
-                    shifttimetableexception_name = lsstatus1[0].shifttimetableexception_name
-                };
-                lsstatus.Add(dmstatus);
+                //dmstatus = new DMStatusinfo()
+                //{
+                //    id = lsstatus1[0].id,
+                //    machinecode = lsstatus1[0].machinecode,
+                //    status = lsstatus1[0].status,
+                //    created_at = lsstatus1[0].created_at,
+                //    error_code = lsstatus1[0].error_code,
+                //    stoppagereason_id = lsstatus1[0].stoppagereason_id,
+                //    shifttimetableexception_id = lsstatus1[0].shifttimetableexception_id,
+                //    stop_name = lsstatus1[0].stop_name,
+                //    shifttimetableexception_name = lsstatus1[0].shifttimetableexception_name
+                //};
+                //lsstatus.Add(dmstatus);
                 for (int i = 0; i < lsstatus1.Count; i++)
                 {
                     var current = lsstatus1[i];
                     var next = lsstatus1[i];
+                    var nextMC = lsstatus1[i];
                     if(i != lsstatus1.Count - 1)
+                    {
                         next = lsstatus1[i + 1];
+                        nextMC = lsstatus1[i+1];
+                    }
+                        
 
                     // Trường hợp MAY_DUNG kéo dài hơn 2 phút
-                    if (current.status == "MAY_DUNG")
+                    if (current.status == "MAY_DUNG" || current.status == "KHONG_CO_TRANG_THAI")
                     {
-                        var duration = (next.created_at - current.created_at).TotalSeconds;
+                        //for (int j = i + 1; j < lsstatus1.Count; j++)
+                        //{
+                        //    if (lsstatus1[j].status == "MAY_CHAY")
+                        //    {
+                        //        nextMC = lsstatus1[j];
+                        //        break;
+                        //    }
+                        //}
+
+                        var duration = (nextMC.created_at - current.created_at).TotalSeconds;
 
                         if (duration == 0 && DateTime.Now < timekt)
                         {
@@ -383,7 +445,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 lsstatus.Add(CloneStatus(next));
                             }
                             // Bỏ qua các trạng thái MAY_DUNG liên tiếp tiếp theo
-                            while (i + 1 < lsstatus1.Count && lsstatus1[i + 1].status == "MAY_DUNG")
+                            while (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status == "MAY_DUNG" || lsstatus1[i + 1].status == "KHONG_CO_TRANG_THAI"))
                             {
                                 i++;
                             }
@@ -392,8 +454,10 @@ namespace WinformGoshi.Forms.Dashboard
                             {
                                 lsstatus.Add(CloneStatus(lsstatus1[i + 1]));
                             }
-
-                            timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                            if (lsstatus.Count > 1)
+                            {
+                                timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                            }
                         }
                     }
                     // Trường hợp MAY_LOI: luôn ghi lại
@@ -416,9 +480,26 @@ namespace WinformGoshi.Forms.Dashboard
                             {
                                 break;
                             }
+                            else if (lsstatus1[j].status == "MAY_DUNG" || lsstatus1[j].status == "KHONG_CO_TRANG_THAI")
+                            {
+                                if (j != lsstatus1.Count - 1)
+                                {
+                                    var nextMD = lsstatus1[j+1];
+                                    var duration = (nextMD.created_at - lsstatus1[j].created_at).TotalSeconds;
+                                    if (duration > 300)
+                                    {
+                                        //lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                        break;
+                                    }
+                                }
+                                
+                            }
                             
                         }
-                        timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                        if (lsstatus.Count > 1)
+                        {
+                            timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                        }
                     }
                 }
             }
@@ -437,8 +518,23 @@ namespace WinformGoshi.Forms.Dashboard
                     slend = 0
                 };
                 sumtimeact = 0;
-                dMShowChart.end = lsstatus.FirstOrDefault().created_at.ToString("HH:mm");
+                dMShowChart.end = lscounter.FirstOrDefault().created_at.ToString("HH:mm");
                 dschart.Add(dMShowChart);
+
+                dMShowChart = new DMShowChart()
+                {
+                    status = "",
+                    start = lscounter.FirstOrDefault().created_at.ToString("HH:mm"),
+                    slstart = 0,
+                    slend = 0
+                };
+                sumtimeact = 0;
+                dMShowChart.end = lsstatus.FirstOrDefault().created_at.ToString("HH:mm");
+                dMShowChart.slend = lscounter.Where(x => x.created_at <= lsstatus.FirstOrDefault().created_at)
+                                                        .OrderByDescending(x => x.created_at)
+                                                        .FirstOrDefault()?.quantity ?? 0;
+                dschart.Add(dMShowChart);
+
                 for (int i = 0; i < lsstatus.Count; i++)
                 {
                     if (lsstatus[i].status == "MAY_DUNG")
@@ -562,6 +658,8 @@ namespace WinformGoshi.Forms.Dashboard
                         //Tìm trạng thái MAY_CHAY gần nhất tiếp theo (nếu có)
                         for (int j = i + 1; j < lsstatus.Count; j++)
                         {
+                            if (lsstatus[j].status == "MAY_DUNG" || lsstatus[j].status == "MAY_LOI")
+                                break;
                             if (lsstatus[j].status == "MAY_CHAY" && j+1 != lsstatus.Count)
                             {
                                 var dmMayChay = new DMShowChart()
@@ -613,6 +711,10 @@ namespace WinformGoshi.Forms.Dashboard
             SuCoSeries.ChartType = SeriesChartType.Line;
             SuCoSeries.Points.Clear();
 
+            Series MAYDUNGSeries = chart1.Series["MÁY DỪNG"];
+            MAYDUNGSeries.ChartType = SeriesChartType.Line;
+            MAYDUNGSeries.Points.Clear();
+
             chart1.ChartAreas[0].AxisX.CustomLabels.Clear();
             List<DateTime> timePointsACT = new List<DateTime>();
             if (lsstatus.Count > 0)
@@ -654,6 +756,18 @@ namespace WinformGoshi.Forms.Dashboard
                         };
                         SuCoSeries.Points.Add(dungEnd);
                     }
+
+                    if (item.status == "MAY_DUNG")
+                    {
+                        MAYDUNGSeries.Points.AddXY(startTime, item.slstart);
+                        MAYDUNGSeries.Points.AddXY(endTime, item.slend);
+
+                        var dungEnd = new DataPoint(endTime.ToOADate(), item.slend)
+                        {
+                            IsEmpty = true // Đảm bảo không vẽ thêm đoạn dư
+                        };
+                        MAYDUNGSeries.Points.Add(dungEnd);
+                    }
                     // Gán label cho điểm cuối
                     var dpEnd = new DataPoint(endTime.ToOADate(), item.slend)
                     {
@@ -677,7 +791,7 @@ namespace WinformGoshi.Forms.Dashboard
 
                 // Gợi ý thêm để hiển thị rõ ràng hơn:
                 var axX = chart1.ChartAreas[0].AxisX;
-                axX.LabelStyle.Angle = -45;
+                axX.LabelStyle.Angle = -90;
                 axX.MajorGrid.Enabled = false;
                 axX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
@@ -686,9 +800,9 @@ namespace WinformGoshi.Forms.Dashboard
             var axisX = chart1.ChartAreas[0].AxisX;
             axisX.LabelStyle.Format = "HH:mm";
             //axisX.IntervalType = DateTimeIntervalType.Hours;
-            axisX.LabelStyle.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            axisX.LabelStyle.Font = new Font("Segoe UI", 6, FontStyle.Regular);
             axisX.LabelStyle.Enabled = true;
-            axisX.LabelStyle.Angle = -60;
+            axisX.LabelStyle.Angle = -90;
             axisX.MajorGrid.Enabled = false;
             axisX.ScaleView.Zoomable = true;
             axisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
@@ -716,7 +830,7 @@ namespace WinformGoshi.Forms.Dashboard
                     Interval = 0,
                     IntervalOffset = pos,
                     StripWidth = 0,
-                    BorderColor = Color.FromArgb(80, Color.Black),
+                    BorderColor = Color.FromArgb(70, Color.Black),
                     BorderDashStyle = ChartDashStyle.Dot,
                     BorderWidth = 1
                 };
@@ -743,7 +857,7 @@ namespace WinformGoshi.Forms.Dashboard
                     Interval = 0,
                     IntervalOffset = pos,
                     StripWidth = 0,
-                    BorderColor = Color.Black,
+                    BorderColor = Color.FromArgb(70, Color.Black),
                     BorderDashStyle = ChartDashStyle.Dot,
                     BorderWidth = 1
                 };
@@ -815,6 +929,158 @@ namespace WinformGoshi.Forms.Dashboard
             }
             catch(Exception ex) { }
             
+            // show table 1
+            dgvDungThucTe.Rows.Clear();
+            dgvDungThucTe.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            int indexRow = 0;
+            if (lsstatus.Count > 0)
+            {
+                for(int i = 0; i < lsstatus.Count; i++)
+                {
+                    if (lsstatus[i].status == "MAY_DUNG" || lsstatus[i].status == "MAY_LOI")
+                    {
+                        dgvDungThucTe.Rows.Add(1);
+                        if (lsstatus[i].stoppagereason_id == -1)
+                        {
+                            dgvDungThucTe.Rows[indexRow].Cells[0].Value = lsstatus[i].shifttimetableexception_name;
+                            dgvDungThucTe.Rows[indexRow].Cells[1].Value = lsstatus[i].created_at.ToString("HH:mm");
+                            if (i+1 == lsstatus.Count)
+                            {
+                                
+                                if (DateTime.Now <= timekt)
+                                {
+                                    dgvDungThucTe.Rows[indexRow].Cells[2].Value = DateTime.Now.ToString("HH:mm");
+                                    dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((DateTime.Now - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
+                                }
+                                else
+                                {
+                                    dgvDungThucTe.Rows[indexRow].Cells[2].Value = timekt.ToString("HH:mm");
+                                    dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((timekt - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
+                                }
+                            }
+                            else
+                            {
+                                dgvDungThucTe.Rows[indexRow].Cells[2].Value = lsstatus[i + 1].created_at.ToString("HH:mm");
+                                dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
+                            }
+
+                            //dgvDungThucTe.Rows[indexRow].Cells[4].Value = "Method";
+                        }
+                        else
+                        {
+                            dgvDungThucTe.Rows[indexRow].Cells[0].Value = lsstatus[i].stop_name;
+                            dgvDungThucTe.Rows[indexRow].Cells[1].Value = lsstatus[i].created_at.ToString("HH:mm");
+                            if (i + 1 == lsstatus.Count)
+                            {
+                                if (DateTime.Now <= timekt)
+                                {
+                                    dgvDungThucTe.Rows[indexRow].Cells[2].Value = DateTime.Now.ToString("HH:mm");
+                                    dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((DateTime.Now - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
+                                }
+                                else
+                                {
+                                    dgvDungThucTe.Rows[indexRow].Cells[2].Value = timekt.ToString("HH:mm");
+                                    dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((timekt - lsstatus[i].created_at).TotalMinutes,1).ToString() + "'";
+                                }
+                            }
+                            else
+                            {
+                                dgvDungThucTe.Rows[indexRow].Cells[2].Value = lsstatus[i + 1].created_at.ToString("HH:mm");
+                                dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
+                            }
+                            //dgvDungThucTe.Rows[i].Cells[4].Value = "Machine";
+                        }
+                        indexRow++;
+                    }
+                }
+            }
+            dgvDungThucTe.ClearSelection();
+            dgvDungThucTe.CurrentCell = null;
+
+            // show table 2
+            dgvKeHoachAndThucTe.Rows.Clear();
+            dgvKeHoachAndThucTe.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            indexRow = 0;
+            double sumCol2 = 0, sumtgloi = 0;
+            if (lsstatus.Count > 0 && getTimeCa.Count > 0)
+            {
+                for (int i = 0; i < getTimeCa.Count; i++)
+                {
+                    dgvKeHoachAndThucTe.Rows.Add(1);
+                    dgvKeHoachAndThucTe.Rows[indexRow].Cells[0].Value = getTimeCa[i].namesc;
+                    dgvKeHoachAndThucTe.Rows[indexRow].Cells[1].Value = (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes.ToString();
+                    var filteredList = lsstatus
+                                        .Where(x => x.shifttimetableexception_id == getTimeCa[i].iddung)
+                                        .ToList();
+                    if (filteredList.Count > 0)
+                    {
+                        for (int j = 0; j < lsstatus.Count; j++)
+                        {
+                            if (lsstatus[j].status == "MAY_DUNG" && lsstatus[j].id == filteredList.FirstOrDefault().id)
+                            {
+                                if (i + 1 == lsstatus.Count)
+                                {
+                                    if (DateTime.Now <= timekt)
+                                    {
+                                        sumCol2 += Math.Round((DateTime.Now - lsstatus[j].created_at).TotalMinutes, 1);
+                                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[2].Value = Math.Round((DateTime.Now - lsstatus[j].created_at).TotalMinutes, 1).ToString();
+                                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = Math.Round(((DateTime.Now - lsstatus[j].created_at).TotalMinutes - (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes), 2).ToString();
+                                    }
+                                    else
+                                    {
+                                        sumCol2 += Math.Round((timekt - lsstatus[j].created_at).TotalMinutes, 1);
+                                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[2].Value = Math.Round((timekt - lsstatus[j].created_at).TotalMinutes, 1).ToString();
+                                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = Math.Round(((timekt - lsstatus[j].created_at).TotalMinutes - (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes), 2).ToString();
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    sumCol2 += Math.Round((lsstatus[j + 1].created_at - lsstatus[j].created_at).TotalMinutes, 1);
+                                    dgvKeHoachAndThucTe.Rows[indexRow].Cells[2].Value = Math.Round((lsstatus[j + 1].created_at - lsstatus[j].created_at).TotalMinutes, 1).ToString();
+                                    dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = Math.Round(((lsstatus[j + 1].created_at - lsstatus[j].created_at).TotalMinutes - (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes), 1).ToString();
+                                }
+                                
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[2].Value = "0";
+                        dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = (0 - (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes).ToString();
+                    }
+                    indexRow++;
+                }
+                for (int i = 0; i < lsstatus.Count; i++)
+                {
+                    if (lsstatus[i].status == "MAY_LOI")
+                    {
+                        if (i + 1 == lsstatus.Count)
+                        {
+                            if (DateTime.Now <= timekt)
+                            {
+                                sumtgloi += Math.Round((DateTime.Now - lsstatus[i].created_at).TotalMinutes, 1);
+                            }
+                            else
+                            {
+                                sumtgloi += Math.Round((timekt - lsstatus[i].created_at).TotalMinutes, 1);
+                            }
+                            
+                        }
+                        else
+                        {
+                            sumtgloi += Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1);
+                        }
+                    }
+                }
+                dgvKeHoachAndThucTe.Rows.Add(1);
+                dgvKeHoachAndThucTe.Rows[indexRow].Cells[0].Value = "Dừng đột xuất";
+                dgvKeHoachAndThucTe.Rows[indexRow].Cells[1].Value = "0";
+                dgvKeHoachAndThucTe.Rows[indexRow].Cells[2].Value = Math.Round(sumtgloi, 1).ToString();
+                dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = Math.Round(sumtgloi, 1).ToString();
+            }
+
             //show label sumtime
             try
             {
@@ -830,16 +1096,16 @@ namespace WinformGoshi.Forms.Dashboard
                     lbTimeACTStart.Text = timebd.ToString("HH:mm");
                     lbTimeACTEnd.Text = timekt.ToString("HH:mm");
                 }
-                
+
                 lbTimePlanEnd.Text = timekt.ToString("HH:mm");
                 lbTimePlanTotal.Text = (timekt - timebd).TotalMinutes.ToString() + "'";
                 lbTimeACTTotal.Text = Math.Round((sumtimeact / 60), 0).ToString() + "'";
-                
-                
+
                 if (DateTime.Now >= timekt)
                 {
                     double a = (timekt - timebd).TotalMinutes - 60;
-                    lbTiLeChayChuyen.Text = Math.Round(((a - (timedungByPhut - 60)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
+                    lbTiLeChayChuyen.Text = Math.Round(((a - (sumCol2+ sumtgloi)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
+                    //lbTiLeChayChuyen.Text = Math.Round(((a - (timedungByPhut - 60)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
                     if (Math.Round((sumtimeact / 60), 0) > (timekt - timebd).TotalMinutes)
                         lbTyLeHT.Text = "Không đạt";
                     else
@@ -851,81 +1117,7 @@ namespace WinformGoshi.Forms.Dashboard
                     lbTyLeHT.Text = "";
                 }
             }
-            catch(Exception ex) { }
-            
-
-            // show table 1
-            LVDungThucTe.Items.Clear();
-            if (lsstatus.Count > 0)
-            {
-                for(int i = 0; i < lsstatus.Count; i++)
-                {
-                    if (lsstatus[i].status == "MAY_DUNG" || lsstatus[i].status == "MAY_LOI")
-                    {
-                        if(lsstatus[i].stoppagereason_id == -1)
-                        {
-                            lv = new ListViewItem(lsstatus[i].shifttimetableexception_name);
-                            lv.SubItems.Add(lsstatus[i].created_at.ToString("HH:mm"));
-                            if (i+1 == lsstatus.Count)
-                            {
-                                lv.SubItems.Add(DateTime.Now.ToString("HH:mm"));
-                                lv.SubItems.Add(Math.Round((DateTime.Now - lsstatus[i].created_at).TotalMinutes,1).ToString() + "'");
-                            }
-                            else
-                            {
-                                lv.SubItems.Add(lsstatus[i + 1].created_at.ToString("HH:mm"));
-                                lv.SubItems.Add(Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes,1).ToString() + "'");
-                            }
-                            
-                            lv.SubItems.Add("Method");
-                            LVDungThucTe.Items.Add(lv);
-                        }
-                        else
-                        {
-                            lv = new ListViewItem(lsstatus[i].stop_name);
-                            lv.SubItems.Add(lsstatus[i].created_at.ToString("HH:mm"));
-                            if (i + 1 == lsstatus.Count)
-                            {
-                                lv.SubItems.Add(DateTime.Now.ToString("HH:mm"));
-                                lv.SubItems.Add((DateTime.Now - lsstatus[i].created_at).TotalMinutes.ToString() + "'");
-                            }
-                            else
-                            {
-                                lv.SubItems.Add(lsstatus[i + 1].created_at.ToString("HH:mm"));
-                                lv.SubItems.Add((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes.ToString() + "'");
-                            }
-                            lv.SubItems.Add("Machine");
-                            LVDungThucTe.Items.Add(lv);
-                        }
-                            
-                    }
-                }
-            }
-
-            // show table 2
-            LVKeHoachAndThucTe.Items.Clear();
-            if (lsstatus.Count > 0)
-            {
-                for (int i = 0; i < lsstatus.Count; i++)
-                {
-                    if (lsstatus[i].status == "MAY_DUNG")
-                    {
-                        lv = new ListViewItem(lsstatus[i].shifttimetableexception_name);
-                        lv.SubItems.Add((lsstatus[i].todate - lsstatus[i].fromdate).TotalMinutes.ToString());
-                        if (i + 1 == lsstatus.Count)
-                        {
-                            lv.SubItems.Add(Math.Round((DateTime.Now - lsstatus[i].created_at).TotalMinutes,1).ToString());
-                            lv.SubItems.Add(Math.Round(((DateTime.Now - lsstatus[i].created_at).TotalMinutes - (lsstatus[i].todate - lsstatus[i].fromdate).TotalMinutes),2).ToString());
-                        }
-                        else
-                        {
-                            lv.SubItems.Add(Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes,1).ToString());
-                            lv.SubItems.Add(Math.Round(((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes - (lsstatus[i].todate - lsstatus[i].fromdate).TotalMinutes),1).ToString());
-                        }
-                        LVKeHoachAndThucTe.Items.Add(lv);
-                    }
-                }
-            }
+            catch (Exception ex) { }
 
         }
 
@@ -1069,6 +1261,18 @@ namespace WinformGoshi.Forms.Dashboard
                 tRefreshData.Dispose();
                 tRefreshData = null;
             }
+        }
+
+        private void dgvDungThucTe_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvDungThucTe.ClearSelection();
+            dgvDungThucTe.CurrentCell = null;
+        }
+
+        private void dgvKeHoachAndThucTe_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvKeHoachAndThucTe.ClearSelection();
+            dgvKeHoachAndThucTe.CurrentCell = null;
         }
     }
 }

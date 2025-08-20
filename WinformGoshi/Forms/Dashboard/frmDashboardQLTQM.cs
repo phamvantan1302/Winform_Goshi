@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Collections;
 using WinformGoshi.Models.dashboard;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace WinformGoshi.Forms.Dashboard
 {
@@ -64,13 +65,38 @@ namespace WinformGoshi.Forms.Dashboard
 
             chart1.ChartAreas[0].AxisY2.Minimum = 0;
             chart1.ChartAreas[0].AxisY2.Maximum = 150;
+            Title titleY2 = new Title();
+            titleY2.Text = "(%)";
+            titleY2.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            titleY2.ForeColor = Color.Black;
+            titleY2.IsDockedInsideChartArea = false; // bỏ docking
+            titleY2.Position.Auto = false;
+            titleY2.Position.X = 97;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY2.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
+            chart1.Titles.Add(titleY2);
 
             chart1.ChartAreas[0].AxisY.Minimum = 0;
-            chart1.ChartAreas[0].AxisY.Maximum = 150;
+            chart1.ChartAreas[0].AxisY.Maximum = 30;
+            Title titleY = new Title();
+            titleY.Text = "(h)";
+            titleY.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            titleY.ForeColor = Color.Black;
+            titleY.IsDockedInsideChartArea = false; // bỏ docking
+            titleY.Position.Auto = false;
+            titleY.Position.X = 3;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
+            chart1.Titles.Add(titleY);
 
-            chart1.ChartAreas[0].AxisX.Minimum = 0;
-            chart1.ChartAreas[0].AxisX.Maximum = 31;
+            chart1.ChartAreas[0].AxisX.Minimum = 0.5;
+            chart1.ChartAreas[0].AxisX.Maximum = 31.5;
             chart1.ChartAreas[0].AxisX.Interval = 1;
+            chart1.ChartAreas[0].AxisX.LabelStyle.IntervalOffset = 0.5;
+            chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+
+            //planSeries.IsXValueIndexed = true;
+            //actSeries.IsXValueIndexed = true;
+            //tyleSeries.IsXValueIndexed = true;
+            //chart1.ChartAreas[0].AxisX.IsMarginVisible = true;
 
             if (getTimeCa.Count > 0)
             {
@@ -99,8 +125,8 @@ namespace WinformGoshi.Forms.Dashboard
                                 continue;
                             bdau = timebdkt.FirstOrDefault().mondayhours.Split('-')[0];
                             kthuc = timebdkt.FirstOrDefault().mondayhours.Split('-')[1];
-                            if (DateTime.TryParseExact(bdau, "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime bdTime) &&
-                                DateTime.TryParseExact(kthuc, "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime ktTime))
+                            DateTime bdTime, ktTime;
+                            if (DateTime.TryParse(bdau, out bdTime) && DateTime.TryParse(kthuc, out ktTime))
                             {
                                 timebd = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, bdTime.Hour, bdTime.Minute, 0);
                                 timekt = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, ktTime.Hour, ktTime.Minute, 0);
@@ -163,7 +189,10 @@ namespace WinformGoshi.Forms.Dashboard
                     };
                     dMLV.sldiff = dMLV.slact - dMLV.slplan;
                     dMLV.chechlech = Math.Round(dMLV.tgianTT - dMLV.tgkehoach, 1);
-                    dMLV.tyleht = Math.Round((dMLV.tgianTT / dMLV.tgkehoach) *100, 0);
+                    if (dMLV.tgkehoach != 0)
+                        dMLV.tyleht = Math.Round((dMLV.tgianTT / dMLV.tgkehoach) * 100, 0);
+                    else
+                        dMLV.tyleht = 0;
                     lsLV.Add(dMLV);
                 }
 
@@ -191,7 +220,7 @@ namespace WinformGoshi.Forms.Dashboard
                 tyleSeries.EmptyPointStyle.MarkerStyle = MarkerStyle.Cross;
                 tyleSeries.IsValueShownAsLabel = true;
 
-                for (int day = 0; day <= 30; day++)
+                for (int day = 1; day <= 31; day++)
                 {
                     var plan = lsplan.FirstOrDefault(x => x.ngay == day);
                     var act = lsact.FirstOrDefault(x => x.ngay == day);
@@ -226,75 +255,72 @@ namespace WinformGoshi.Forms.Dashboard
             if (lsLV.Count <= 0)
                 return;
             //show
-            ListViewItem lv;
-            listView.Font = new Font("Segoe UI", 8, FontStyle.Regular);
-            listView.Items.Clear();
 
-            lv = new ListViewItem("Plan");
-            foreach (var item in lsLV)
+            dgv.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            dgv.Rows.Clear();
+            dgv.Rows.Add(8);
+
+            dgv.Rows[0].Cells[0].Value = "Plan";
+            for (int i = 0; i< lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.slplan.ToString());
+                dgv.Rows[0].Cells[i+1].Value = lsLV[i].slplan.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.slplan).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[0].Cells[32].Value = lsLV.Sum(x => x.slplan).ToString();
 
-            lv = new ListViewItem("Act");
-            foreach (var item in lsLV)
+            dgv.Rows[1].Cells[0].Value = "Act";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.slact.ToString());
+                dgv.Rows[1].Cells[i + 1].Value = lsLV[i].slact.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.slact).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[1].Cells[32].Value = lsLV.Sum(x => x.slact).ToString();
 
-            lv = new ListViewItem("Diff");
-            foreach (var item in lsLV)
+            dgv.Rows[2].Cells[0].Value = "Diff";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.sldiff.ToString());
+                dgv.Rows[2].Cells[i + 1].Value = lsLV[i].sldiff.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.sldiff).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[2].Cells[32].Value = lsLV.Sum(x => x.sldiff).ToString();
 
-            lv = new ListViewItem("TG SX theo KH (h)");
-            foreach (var item in lsLV)
+            dgv.Rows[3].Cells[0].Value = "TG SX theo KH (h)";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.tgkehoach.ToString());
+                dgv.Rows[3].Cells[i + 1].Value = lsLV[i].tgkehoach.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.tgkehoach).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[3].Cells[32].Value = lsLV.Sum(x => x.tgkehoach).ToString();
 
-            lv = new ListViewItem("TG dừng chuyền");
-            foreach (var item in lsLV)
+            dgv.Rows[4].Cells[0].Value = "TG dừng chuyền";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.tgiandung.ToString());
+                dgv.Rows[4].Cells[i + 1].Value = lsLV[i].tgiandung.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.tgiandung).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[4].Cells[32].Value = lsLV.Sum(x => x.tgiandung).ToString();
 
-            lv = new ListViewItem("TG SX thực tế (h)");
-            foreach (var item in lsLV)
+            dgv.Rows[5].Cells[0].Value = "TG SX thực tế (h)";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.tgianTT.ToString());
+                dgv.Rows[5].Cells[i + 1].Value = lsLV[i].tgianTT.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.tgianTT).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[5].Cells[32].Value = lsLV.Sum(x => x.tgianTT).ToString();
 
-            lv = new ListViewItem("Chênh lệch (h)");
-            foreach (var item in lsLV)
+            dgv.Rows[6].Cells[0].Value = "Chênh lệch (h)";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.chechlech.ToString());
+                dgv.Rows[6].Cells[i + 1].Value = lsLV[i].chechlech.ToString();
             }
-            lv.SubItems.Add(lsLV.Sum(x => x.chechlech).ToString());
-            listView.Items.Add(lv);
+            dgv.Rows[6].Cells[32].Value = lsLV.Sum(x => x.chechlech).ToString();
 
-            lv = new ListViewItem("Tỷ lệ hoàn thành");
-            foreach (var item in lsLV)
+            dgv.Rows[7].Cells[0].Value = "Tỷ lệ hoàn thành";
+            for (int i = 0; i < lsLV.Count; i++)
             {
-                lv.SubItems.Add(item.tyleht.ToString()+ "%");
+                dgv.Rows[7].Cells[i + 1].Value = lsLV[i].tyleht.ToString() + "%";
             }
-            listView.Items.Add(lv);
 
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+        }
+
+        private void dgv_SelectionChanged(object sender, EventArgs e)
+        {
+            dgv.ClearSelection();
+            dgv.CurrentCell = null;
         }
     }
 }

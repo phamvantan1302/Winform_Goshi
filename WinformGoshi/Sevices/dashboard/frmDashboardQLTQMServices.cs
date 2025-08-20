@@ -130,7 +130,7 @@ namespace WinformGoshi.Sevices.dashboard
                       " select min(created_at) " +
                       " from productioncounting_counterinfo " +
                       " where 1=1 " +
-                      " and quantity = 0 " +
+                      " and quantity = 1 " +
                       " and created_at >= '" + fromDate.ToString("yyyy-MM-dd 06:00:00") + "' " +
                       " and created_at < '" + toDate.ToString("yyyy-MM-dd 06:00:00") + "' " +
                       ") " +
@@ -172,12 +172,12 @@ namespace WinformGoshi.Sevices.dashboard
                 sql = "select id, machinecode, quantity, counter, created_at " +
                       " from productioncounting_counterinfo " +
                       " where created_at >= (" +
-                      " select min(created_at) " +
+                      " select max(created_at) " +
                       " from productioncounting_counterinfo " +
                       " where 1=1 " +
-                      " and quantity = 0 " +
-                      " and created_at >= '" + fromDate.ToString("yyyy-MM-dd HH:mm:ss") + "' " +
-                      " and created_at < '" + toDate.ToString("yyyy-MM-dd HH:mm:ss") + "' " +
+                      " and quantity = 1 " +
+                      " and created_at >= '" + fromDate.AddMinutes(-20).ToString("yyyy-MM-dd HH:mm:ss") + "' " +
+                      " and created_at < '" + fromDate.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss") + "' " +
                       ") " +
                       " and created_at <= '" + toDate.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
                 sql += " order by created_at ";
