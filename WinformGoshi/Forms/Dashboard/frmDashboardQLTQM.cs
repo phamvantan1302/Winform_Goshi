@@ -35,18 +35,27 @@ namespace WinformGoshi.Forms.Dashboard
 
         private void loaddata(object sender, EventArgs e)
         {
-            Series planSeries = chart1.Series["plan"];
+            Series actSeries = chart1.Series["ttdem"];
+            Series planSeries = chart1.Series["ttngay"];
             planSeries.Points.Clear();
-            Series actSeries = chart1.Series["act"];
             actSeries.Points.Clear();
             Series tyleSeries = chart1.Series["tyle"];
             tyleSeries.Points.Clear();
+            Series tylekhSeries = chart1.Series["tylekh"];
+            tylekhSeries.Points.Clear();
             chart1.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
             chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = true;
             chart1.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
             planSeries.YAxisType = AxisType.Primary;
             actSeries.YAxisType = AxisType.Primary;
             tyleSeries.YAxisType = AxisType.Secondary;
+            tylekhSeries.YAxisType = AxisType.Secondary;
+
+            actSeries.BorderColor = Color.Silver;
+            actSeries.BorderWidth = 1;
+
+            planSeries.BorderColor = Color.Silver;
+            planSeries.BorderWidth = 1;
 
             //Data
             string valueThu = "", bdau = "", kthuc = "";
@@ -56,34 +65,42 @@ namespace WinformGoshi.Forms.Dashboard
             List<DMStatusinfo> lsstatus = frmDashboardQLTQMServices.getDSStatusinfo(date);
             List<DMCounterinfo> lscounter = frmDashboardQLTQMServices.getDSCounterinfo(date);
             List<DMOrder> lsorder = frmDashboardQLTQMServices.getDataOrder(DateTime.Now);
-            List<DMPlan> lsplan = new List<DMPlan>();
-            DMPlan dMPlan = new DMPlan();
-            List<DMPlan> lsact = new List<DMPlan>();
-            DMPlan dMact = new DMPlan();
+            List<DMPlan> lsacthc = new List<DMPlan>();
+            DMPlan dMacthc = new DMPlan();
+            List<DMPlan> lsactd = new List<DMPlan>();
+            DMPlan dMactd = new DMPlan();
             List<dataViewTable> lsLV = new List<dataViewTable>();
             dataViewTable dMLV = new dataViewTable();
 
             chart1.ChartAreas[0].AxisY2.Minimum = 0;
-            chart1.ChartAreas[0].AxisY2.Maximum = 150;
+            chart1.ChartAreas[0].AxisY2.Maximum = 100;
+            chart1.ChartAreas[0].AxisY2.Interval = 10;
             Title titleY2 = new Title();
             titleY2.Text = "(%)";
-            titleY2.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            titleY2.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             titleY2.ForeColor = Color.Black;
             titleY2.IsDockedInsideChartArea = false; // bỏ docking
             titleY2.Position.Auto = false;
-            titleY2.Position.X = 97;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY2.Position.X = 98;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
             titleY2.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
             chart1.Titles.Add(titleY2);
 
             chart1.ChartAreas[0].AxisY.Minimum = 0;
-            chart1.ChartAreas[0].AxisY.Maximum = 30;
+            chart1.ChartAreas[0].AxisY.Maximum = 2000;
+            chart1.ChartAreas[0].AxisY.Interval = 200;
+
+            //fix loi hien thi
+            chart1.ChartAreas[0].AxisY.IsStartedFromZero = true;
+            chart1.ChartAreas[0].AxisY.ScaleBreakStyle.Enabled = false;
+            chart1.ChartAreas[0].RecalculateAxesScale();
+
             Title titleY = new Title();
-            titleY.Text = "(h)";
-            titleY.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            titleY.Text = "(pcs)";
+            titleY.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             titleY.ForeColor = Color.Black;
             titleY.IsDockedInsideChartArea = false; // bỏ docking
             titleY.Position.Auto = false;
-            titleY.Position.X = 3;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY.Position.X = 2;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
             titleY.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
             chart1.Titles.Add(titleY);
 
@@ -104,23 +121,25 @@ namespace WinformGoshi.Forms.Dashboard
                 for (int day = 1; day <= 31; day++)
                 {
                     DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
-                    double sumtimeca = 0;
+                    double sumtimeca = 0, sumtimekh = 0, totalslca = 0;
                     sumtimeact = 0;
                     slTTtrongngay = 0;
+                    string ca = "";
+                    bool checkca = false;
 
                     var dailyData = lsorder
                     .Where(x => x.fromDate.Date == currentDate)
                     .Select(x => (x.plannedquantity, x.shift_id))
                     .ToList();
-                    var totalInDay = lsorder
-                        .Where(x => x.fromDate.Date == currentDate)
-                        .Sum(x => x.plannedquantity);
+                    if (dailyData.Count == 1)
+                        checkca = true;
 
                     if (dailyData.Count > 0)
                     {
                         foreach (var dd in dailyData)
                         {
                             var timebdkt = getTimeCa.Where(x => x.id == dd.shift_id).ToList();
+                            totalslca = lsorder.Where(x => x.fromDate.Date == currentDate && x.shift_id == dd.shift_id).FirstOrDefault().plannedquantity;
                             if (timebdkt.Count == 0)
                                 continue;
                             bdau = timebdkt.FirstOrDefault().mondayhours.Split('-')[0];
@@ -133,6 +152,45 @@ namespace WinformGoshi.Forms.Dashboard
                                 if (ktTime < bdTime)
                                 {
                                     timebd = timebd.AddDays(-1);
+                                    ca = "S4";
+                                    if ((timekt - timebd).TotalHours < 10)
+                                        sumtimekh = 435;
+                                    else
+                                        sumtimekh = 615;
+                                    if (checkca)
+                                    {
+                                        dMLV = new dataViewTable()
+                                        {
+                                            ngay = day,
+                                            slplan = 0,
+                                            slact = 0,
+                                            calv = "HC",
+                                            tyleht = "",
+                                            tylecc = 0
+                                        };
+                                        lsLV.Add(dMLV);
+                                    }
+                                }
+                                else
+                                {
+                                    ca = "HC";
+                                    if ((timekt - timebd).TotalHours < 10)
+                                        sumtimekh = 480;
+                                    else
+                                        sumtimekh = 660;
+                                    if (checkca)
+                                    {
+                                        dMLV = new dataViewTable()
+                                        {
+                                            ngay = day,
+                                            slplan = 0,
+                                            slact = 0,
+                                            calv = "S4",
+                                            tyleht = "",
+                                            tylecc = 0
+                                        };
+                                        lsLV.Add(dMLV);
+                                    }
                                 }
                                 sumtimeca += (timekt - timebd).TotalSeconds;
 
@@ -158,60 +216,89 @@ namespace WinformGoshi.Forms.Dashboard
 
                                 var listSLTrongNgay = frmDashboardQLTQMServices.getSLByNgay(timebd, timekt);
                                 if(listSLTrongNgay.Count > 0)
-                                    slTTtrongngay += listSLTrongNgay.LastOrDefault().quantity;
+                                    slTTtrongngay = listSLTrongNgay.LastOrDefault().quantity;
                             }
+
+                            //act
+                            if (ca == "S4")
+                            {
+                                dMactd = new DMPlan()
+                                {
+                                    ngay = day,
+                                    gio = slTTtrongngay
+                                };
+                                lsactd.Add(dMactd);
+                            }
+                            else
+                            {
+                                dMacthc = new DMPlan
+                                {
+                                    ngay = day,
+                                    gio = slTTtrongngay
+                                };
+                                lsacthc.Add(dMacthc);
+                            }
+                            
+                            dMLV = new dataViewTable()
+                            {
+                                ngay = day,
+                                slplan = totalslca,
+                                slact = slTTtrongngay,
+                                calv = ca
+                            };
+                            if (dMLV.slact >= dMLV.slplan)
+                                dMLV.tyleht = "O";
+                            else
+                                dMLV.tyleht = "X";
+                            dMLV.tylecc = Math.Round(((dMLV.slact * 35) / (sumtimekh*60)) * 100, 0);
+                            lsLV.Add(dMLV);
 
                         }
                     }
-
-                    //act
-                    dMact = new DMPlan()
-                    {
-                        ngay = day,
-                        gio = Math.Round(sumtimeact / 3600, 1)
-                    };
-                    lsact.Add(dMact);
-
-                    dMPlan = new DMPlan
-                    {
-                        ngay = day,
-                        gio = Math.Round(sumtimeca / 3600, 1)
-                    };
-                    lsplan.Add(dMPlan);
-
-                    dMLV = new dataViewTable()
-                    {
-                        ngay = day,
-                        slplan = totalInDay,
-                        tgkehoach = Math.Round(sumtimeca / 3600, 1),
-                        slact = slTTtrongngay,
-                        tgianTT = Math.Round(sumtimeact / 3600, 1)
-                    };
-                    dMLV.sldiff = dMLV.slact - dMLV.slplan;
-                    dMLV.chechlech = Math.Round(dMLV.tgianTT - dMLV.tgkehoach, 1);
-                    if (dMLV.tgkehoach != 0)
-                        dMLV.tyleht = Math.Round((dMLV.tgianTT / dMLV.tgkehoach) * 100, 0);
                     else
-                        dMLV.tyleht = 0;
-                    lsLV.Add(dMLV);
+                    {
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "S4",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "HC",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                    }
+
+                    
                 }
 
-                // show plan
-                if (lsplan.Count > 0)
+                //show act dem
+                if (lsactd.Count > 0)
                 {
-                    foreach (var it in lsplan)
-                    {
-                        planSeries.Points.AddXY(it.ngay, it.gio);
-                        planSeries.ToolTip = (it.gio).ToString();
-                    }
-                }
-                //show act
-                if (lsact.Count > 0)
-                {
-                    foreach (var it in lsact)
+                    foreach (var it in lsactd)
                     {
                         actSeries.Points.AddXY(it.ngay, it.gio);
                         actSeries.ToolTip = (it.gio).ToString();
+                    }
+                }
+
+                // show act hc
+                if (lsacthc.Count > 0)
+                {
+                    foreach (var it in lsacthc)
+                    {
+                        planSeries.Points.AddXY(it.ngay, it.gio);
+                        planSeries.ToolTip = (it.gio).ToString();
                     }
                 }
 
@@ -220,26 +307,39 @@ namespace WinformGoshi.Forms.Dashboard
                 tyleSeries.EmptyPointStyle.MarkerStyle = MarkerStyle.Cross;
                 tyleSeries.IsValueShownAsLabel = true;
 
+                tylekhSeries.EmptyPointStyle.BorderDashStyle = ChartDashStyle.Dash;
+                tylekhSeries.EmptyPointStyle.MarkerStyle = MarkerStyle.Cross;
+                tylekhSeries.IsValueShownAsLabel = true;
+
                 for (int day = 1; day <= 31; day++)
                 {
-                    var plan = lsplan.FirstOrDefault(x => x.ngay == day);
-                    var act = lsact.FirstOrDefault(x => x.ngay == day);
+                    var dscc = lsLV.Where(x => x.ngay == day).ToList();
+                    DataPoint ttkh = new DataPoint();
+                    ttkh.SetValueXY(day, 85);
+                    ttkh.Label = $"{85}%";
+                    tylekhSeries.Points.Add(ttkh);
 
-                    if (plan != null && act != null && act.gio != 0)
+
+                    foreach (var item in dscc)
                     {
-                        double tyle = (double)act.gio / plan.gio * 100;
-                        DataPoint point = new DataPoint();
-                        point.SetValueXY(day, tyle);
-                        point.Label = $"{Math.Round(tyle, 0)}%";
-                        point.LabelForeColor = Color.Green;
-                        tyleSeries.Points.Add(point);
-                    }
-                    else
-                    {
-                        DataPoint emptyPoint = new DataPoint(day, 0);
-                        //emptyPoint.SetValueXY(day, 0);
-                        emptyPoint.IsEmpty = true;
-                        tyleSeries.Points.Add(emptyPoint);
+                        if (item.tylecc == 0)
+                        {
+                            DataPoint emptyPoint = new DataPoint(day, 0);
+                            //emptyPoint.SetValueXY(day, 0);
+                            emptyPoint.IsEmpty = true;
+                            tyleSeries.Points.Add(emptyPoint);
+                        }
+                        else
+                        {
+                            DataPoint point = new DataPoint();
+                            if(item.calv == "S4")
+                                point.SetValueXY(day-0.3, item.tylecc);
+                            else
+                                point.SetValueXY(day+0.3, item.tylecc);
+                            point.Label = $"{Math.Round(item.tylecc, 0)}%";
+                            point.LabelForeColor = Color.Green;
+                            tyleSeries.Points.Add(point);
+                        }
                     }
                 }
             }
@@ -256,65 +356,42 @@ namespace WinformGoshi.Forms.Dashboard
                 return;
             //show
 
-            dgv.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            dgv.Font = new Font("Segoe UI", 7, FontStyle.Regular);
             dgv.Rows.Clear();
-            dgv.Rows.Add(8);
+            dgv.Rows.Add(5);
 
-            dgv.Rows[0].Cells[0].Value = "Plan";
+            dgv.Rows[0].Cells[0].Value = "Ca";
             for (int i = 0; i< lsLV.Count; i++)
             {
-                dgv.Rows[0].Cells[i+1].Value = lsLV[i].slplan.ToString();
+                dgv.Rows[0].Cells[i+1].Value = lsLV[i].calv.ToString();
             }
-            dgv.Rows[0].Cells[32].Value = lsLV.Sum(x => x.slplan).ToString();
 
-            dgv.Rows[1].Cells[0].Value = "Act";
+            dgv.Rows[1].Cells[0].Value = "Sản lượng KH";
             for (int i = 0; i < lsLV.Count; i++)
             {
-                dgv.Rows[1].Cells[i + 1].Value = lsLV[i].slact.ToString();
+                dgv.Rows[1].Cells[i + 1].Value = lsLV[i].slplan.ToString();
             }
-            dgv.Rows[1].Cells[32].Value = lsLV.Sum(x => x.slact).ToString();
+            dgv.Rows[1].Cells[63].Value = lsLV.Sum(x => x.slplan).ToString();
 
-            dgv.Rows[2].Cells[0].Value = "Diff";
+            dgv.Rows[2].Cells[0].Value = "Sản lượng TT";
             for (int i = 0; i < lsLV.Count; i++)
             {
-                dgv.Rows[2].Cells[i + 1].Value = lsLV[i].sldiff.ToString();
+                dgv.Rows[2].Cells[i + 1].Value = lsLV[i].slact.ToString();
             }
-            dgv.Rows[2].Cells[32].Value = lsLV.Sum(x => x.sldiff).ToString();
+            dgv.Rows[2].Cells[63].Value = lsLV.Sum(x => x.slact).ToString();
 
-            dgv.Rows[3].Cells[0].Value = "TG SX theo KH (h)";
+            dgv.Rows[3].Cells[0].Value = "Tỉ lệ hoàn thành";
             for (int i = 0; i < lsLV.Count; i++)
             {
-                dgv.Rows[3].Cells[i + 1].Value = lsLV[i].tgkehoach.ToString();
+                dgv.Rows[3].Cells[i + 1].Value = lsLV[i].tyleht.ToString();
             }
-            dgv.Rows[3].Cells[32].Value = lsLV.Sum(x => x.tgkehoach).ToString();
 
-            dgv.Rows[4].Cells[0].Value = "TG dừng chuyền";
+            dgv.Rows[4].Cells[0].Value = "Tỉ lệ chạy chuyền";
             for (int i = 0; i < lsLV.Count; i++)
             {
-                dgv.Rows[4].Cells[i + 1].Value = lsLV[i].tgiandung.ToString();
+                dgv.Rows[4].Cells[i + 1].Value = lsLV[i].tylecc.ToString() + "%";
             }
-            dgv.Rows[4].Cells[32].Value = lsLV.Sum(x => x.tgiandung).ToString();
-
-            dgv.Rows[5].Cells[0].Value = "TG SX thực tế (h)";
-            for (int i = 0; i < lsLV.Count; i++)
-            {
-                dgv.Rows[5].Cells[i + 1].Value = lsLV[i].tgianTT.ToString();
-            }
-            dgv.Rows[5].Cells[32].Value = lsLV.Sum(x => x.tgianTT).ToString();
-
-            dgv.Rows[6].Cells[0].Value = "Chênh lệch (h)";
-            for (int i = 0; i < lsLV.Count; i++)
-            {
-                dgv.Rows[6].Cells[i + 1].Value = lsLV[i].chechlech.ToString();
-            }
-            dgv.Rows[6].Cells[32].Value = lsLV.Sum(x => x.chechlech).ToString();
-
-            dgv.Rows[7].Cells[0].Value = "Tỷ lệ hoàn thành";
-            for (int i = 0; i < lsLV.Count; i++)
-            {
-                dgv.Rows[7].Cells[i + 1].Value = lsLV[i].tyleht.ToString() + "%";
-            }
-
+                        
         }
 
         private void dgv_SelectionChanged(object sender, EventArgs e)

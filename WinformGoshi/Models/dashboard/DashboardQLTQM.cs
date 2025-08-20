@@ -26,11 +26,9 @@ namespace WinformGoshi.Models.dashboard
         public double slplan { get; set; }
         public double slact { get; set; }
         public double sldiff { get; set; }
-        public double tgkehoach { get; set; }
-        public double tgiandung { get; set; }
-        public double tgianTT { get; set; }
-        public double chechlech { get; set; }
-        public double tyleht { get; set; }
+        public double tylecc { get; set; }
+        public string tyleht { get; set; }
+        public string calv { get; set; }
         public int ngay { get; set; }
     }
 }
