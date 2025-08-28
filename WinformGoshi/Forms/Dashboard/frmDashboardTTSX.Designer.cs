@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series22 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series23 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -96,6 +96,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnBackDay = new System.Windows.Forms.Button();
+            this.btnNextDay = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -158,6 +160,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.btnNextDay);
+            this.panel2.Controls.Add(this.btnBackDay);
             this.panel2.Controls.Add(this.dgvKeHoachAndThucTe);
             this.panel2.Controls.Add(this.dgvDungThucTe);
             this.panel2.Controls.Add(this.label13);
@@ -226,14 +230,14 @@
             this.dgvKeHoachAndThucTe.Location = new System.Drawing.Point(898, 477);
             this.dgvKeHoachAndThucTe.Name = "dgvKeHoachAndThucTe";
             this.dgvKeHoachAndThucTe.ReadOnly = true;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvKeHoachAndThucTe.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvKeHoachAndThucTe.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvKeHoachAndThucTe.RowHeadersVisible = false;
             this.dgvKeHoachAndThucTe.Size = new System.Drawing.Size(651, 145);
             this.dgvKeHoachAndThucTe.TabIndex = 55;
@@ -326,7 +330,7 @@
             this.cbbCa.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbCa.Font = new System.Drawing.Font("Century Schoolbook", 8.25F);
             this.cbbCa.FormattingEnabled = true;
-            this.cbbCa.Location = new System.Drawing.Point(781, 6);
+            this.cbbCa.Location = new System.Drawing.Point(878, 7);
             this.cbbCa.Name = "cbbCa";
             this.cbbCa.Size = new System.Drawing.Size(128, 23);
             this.cbbCa.TabIndex = 52;
@@ -337,7 +341,7 @@
             this.cbbModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbModel.Font = new System.Drawing.Font("Century Schoolbook", 8.25F);
             this.cbbModel.FormattingEnabled = true;
-            this.cbbModel.Location = new System.Drawing.Point(475, 7);
+            this.cbbModel.Location = new System.Drawing.Point(572, 7);
             this.cbbModel.Name = "cbbModel";
             this.cbbModel.Size = new System.Drawing.Size(93, 23);
             this.cbbModel.TabIndex = 51;
@@ -347,7 +351,7 @@
             this.cbbChuyen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbChuyen.Font = new System.Drawing.Font("Century Schoolbook", 8.25F);
             this.cbbChuyen.FormattingEnabled = true;
-            this.cbbChuyen.Location = new System.Drawing.Point(266, 7);
+            this.cbbChuyen.Location = new System.Drawing.Point(363, 7);
             this.cbbChuyen.Name = "cbbChuyen";
             this.cbbChuyen.Size = new System.Drawing.Size(113, 23);
             this.cbbChuyen.TabIndex = 50;
@@ -356,7 +360,7 @@
             // txtCT
             // 
             this.txtCT.Font = new System.Drawing.Font("Century Schoolbook", 9.75F, System.Drawing.FontStyle.Bold);
-            this.txtCT.Location = new System.Drawing.Point(660, 6);
+            this.txtCT.Location = new System.Drawing.Point(757, 7);
             this.txtCT.Name = "txtCT";
             this.txtCT.Size = new System.Drawing.Size(41, 23);
             this.txtCT.TabIndex = 49;
@@ -367,11 +371,12 @@
             this.dtpSearch.CustomFormat = "dd/MM/yyyy";
             this.dtpSearch.Font = new System.Drawing.Font("Century Schoolbook", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpSearch.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpSearch.Location = new System.Drawing.Point(101, 8);
+            this.dtpSearch.Location = new System.Drawing.Point(124, 7);
             this.dtpSearch.Name = "dtpSearch";
             this.dtpSearch.Size = new System.Drawing.Size(99, 21);
             this.dtpSearch.TabIndex = 48;
             this.dtpSearch.CloseUp += new System.EventHandler(this.dtpSearch_CloseUp);
+            this.dtpSearch.ValueChanged += new System.EventHandler(this.dtpSearch_ValueChanged);
             // 
             // lbTiLeChayChuyen
             // 
@@ -801,51 +806,51 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.Name = "ChartArea1";
-            chartArea1.Position.Auto = false;
-            chartArea1.Position.Height = 94F;
-            chartArea1.Position.Width = 100F;
-            chartArea1.Position.Y = 3F;
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
-            legend1.Name = "Legend1";
-            legend1.Position.Auto = false;
-            legend1.Position.Height = 17.99308F;
-            legend1.Position.Width = 11.39073F;
-            legend1.Position.X = 13F;
-            legend1.Position.Y = 3F;
-            this.chart1.Legends.Add(legend1);
+            chartArea6.AxisY.MajorGrid.Enabled = false;
+            chartArea6.Name = "ChartArea1";
+            chartArea6.Position.Auto = false;
+            chartArea6.Position.Height = 94F;
+            chartArea6.Position.Width = 100F;
+            chartArea6.Position.Y = 3F;
+            this.chart1.ChartAreas.Add(chartArea6);
+            legend6.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
+            legend6.Name = "Legend1";
+            legend6.Position.Auto = false;
+            legend6.Position.Height = 17.99308F;
+            legend6.Position.Width = 11.39073F;
+            legend6.Position.X = 13F;
+            legend6.Position.Y = 3F;
+            this.chart1.Legends.Add(legend6);
             this.chart1.Location = new System.Drawing.Point(3, 40);
             this.chart1.Name = "chart1";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.Blue;
-            series1.Legend = "Legend1";
-            series1.Name = "PLAN";
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Color = System.Drawing.Color.Green;
-            series2.Legend = "Legend1";
-            series2.Name = "ACT";
-            series3.BorderWidth = 2;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.Red;
-            series3.Legend = "Legend1";
-            series3.Name = "SỰ CỐ";
-            series4.BorderWidth = 2;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Color = System.Drawing.Color.Orange;
-            series4.Legend = "Legend1";
-            series4.Name = "MÁY DỪNG";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
+            series21.BorderWidth = 2;
+            series21.ChartArea = "ChartArea1";
+            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series21.Color = System.Drawing.Color.Blue;
+            series21.Legend = "Legend1";
+            series21.Name = "PLAN";
+            series22.BorderWidth = 2;
+            series22.ChartArea = "ChartArea1";
+            series22.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series22.Color = System.Drawing.Color.Green;
+            series22.Legend = "Legend1";
+            series22.Name = "ACT";
+            series23.BorderWidth = 2;
+            series23.ChartArea = "ChartArea1";
+            series23.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series23.Color = System.Drawing.Color.Red;
+            series23.Legend = "Legend1";
+            series23.Name = "SỰ CỐ";
+            series24.BorderWidth = 2;
+            series24.ChartArea = "ChartArea1";
+            series24.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series24.Color = System.Drawing.Color.Orange;
+            series24.Legend = "Legend1";
+            series24.Name = "MÁY DỪNG";
+            this.chart1.Series.Add(series21);
+            this.chart1.Series.Add(series22);
+            this.chart1.Series.Add(series23);
+            this.chart1.Series.Add(series24);
             this.chart1.Size = new System.Drawing.Size(1189, 437);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
@@ -855,7 +860,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Century Schoolbook", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label7.Location = new System.Drawing.Point(753, 9);
+            this.label7.Location = new System.Drawing.Point(850, 10);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 16);
             this.label7.TabIndex = 4;
@@ -866,7 +871,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Century Schoolbook", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label6.Location = new System.Drawing.Point(624, 9);
+            this.label6.Location = new System.Drawing.Point(721, 10);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(30, 16);
             this.label6.TabIndex = 3;
@@ -877,7 +882,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Century Schoolbook", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label5.Location = new System.Drawing.Point(414, 10);
+            this.label5.Location = new System.Drawing.Point(511, 10);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(64, 16);
             this.label5.TabIndex = 2;
@@ -888,7 +893,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Schoolbook", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.MediumBlue;
-            this.label4.Location = new System.Drawing.Point(222, 10);
+            this.label4.Location = new System.Drawing.Point(319, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 16);
             this.label4.TabIndex = 1;
@@ -904,6 +909,30 @@
             this.label3.Size = new System.Drawing.Size(56, 16);
             this.label3.TabIndex = 0;
             this.label3.Text = "NGÀY: ";
+            // 
+            // btnBackDay
+            // 
+            this.btnBackDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnBackDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBackDay.Location = new System.Drawing.Point(99, 7);
+            this.btnBackDay.Name = "btnBackDay";
+            this.btnBackDay.Size = new System.Drawing.Size(21, 21);
+            this.btnBackDay.TabIndex = 56;
+            this.btnBackDay.Text = "<";
+            this.btnBackDay.UseVisualStyleBackColor = true;
+            this.btnBackDay.Click += new System.EventHandler(this.btnBackDay_Click);
+            // 
+            // btnNextDay
+            // 
+            this.btnNextDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnNextDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextDay.Location = new System.Drawing.Point(227, 7);
+            this.btnNextDay.Name = "btnNextDay";
+            this.btnNextDay.Size = new System.Drawing.Size(21, 21);
+            this.btnNextDay.TabIndex = 57;
+            this.btnNextDay.Text = ">";
+            this.btnNextDay.UseVisualStyleBackColor = true;
+            this.btnNextDay.Click += new System.EventHandler(this.btnNextDay_Click);
             // 
             // frmDashboardTTSX
             // 
@@ -989,5 +1018,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.Button btnBackDay;
+        private System.Windows.Forms.Button btnNextDay;
     }
 }

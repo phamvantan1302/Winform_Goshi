@@ -25,11 +25,12 @@ namespace WinformGoshi.Forms.Dashboard
         private System.Windows.Forms.Timer tRefreshDataD;
         private bool isFormClosing = false;
         private bool checktb = true;
+        private DateTime datenow = DateTime.Now;
         public frmDashboardTTSX()        
         {
             InitializeComponent();
 
-            List<DMChuyen> lsChuyen = frmDashboardTTSXServices.getDSChuyen(dtpSearch.Value);
+            List<DMChuyen> lsChuyen = frmDashboardTTSXServices.getDSChuyen(datenow);
             if (lsChuyen.Count > 0)
             {
                 cbbChuyen.ValueMember = "id";
@@ -37,7 +38,7 @@ namespace WinformGoshi.Forms.Dashboard
                 cbbChuyen.DataSource = lsChuyen;
                 cbbChuyen.SelectedIndex = 0;
 
-                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
+                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(datenow, cbbChuyen.SelectedValue.ToString());
                 if (lsmodel.Count > 0)
                 {
                     cbbModel.ValueMember = "id";
@@ -46,7 +47,7 @@ namespace WinformGoshi.Forms.Dashboard
                     cbbModel.SelectedIndex = 0;
                 }
 
-                List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
+                List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(datenow, cbbChuyen.SelectedValue.ToString());
                 if (lsca.Count > 0)
                 {
                     cbbCa.ValueMember = "id";
@@ -95,7 +96,7 @@ namespace WinformGoshi.Forms.Dashboard
             if (cbbCa.SelectedValue != null)
                 idca = int.Parse(cbbCa.SelectedValue.ToString());
 
-            mmtb = frmDashboardTTSXServices.getMMTB(dtpSearch.Value, line, mode);
+            mmtb = frmDashboardTTSXServices.getMMTB(datenow, line, mode);
 
             status = frmDashboardTTSXServices.getStatusinfo(mmtb);
             btnMD.BackColor = Color.White;
@@ -141,9 +142,9 @@ namespace WinformGoshi.Forms.Dashboard
             if (cbbCa.SelectedValue != null)
                 idca = int.Parse(cbbCa.SelectedValue.ToString());
 
-            mmtb = frmDashboardTTSXServices.getMMTB(dtpSearch.Value, line, mode);
-            List<DMTimeByCa> getTimeCa = frmDashboardTTSXServices.getDataCaKH(dtpSearch.Value, idca);
-            double slkh = frmDashboardTTSXServices.getSLKH(dtpSearch.Value, line, idca);
+            mmtb = frmDashboardTTSXServices.getMMTB(datenow, line, mode);
+            List<DMTimeByCa> getTimeCa = frmDashboardTTSXServices.getDataCaKH(datenow, idca);
+            double slkh = frmDashboardTTSXServices.getSLKH(datenow, line, idca);
             List<DMShowChart> dschart = new List<DMShowChart>();
             List<DMShowChart> dschartError = new List<DMShowChart>();
             DMShowChart dMShowChart = null;
@@ -183,9 +184,9 @@ namespace WinformGoshi.Forms.Dashboard
                         kthuc = ktTime.ToString("HH:mm");
 
                         timekt = new DateTime(
-                        dtpSearch.Value.Year,
-                        dtpSearch.Value.Month,
-                        dtpSearch.Value.Day,
+                        datenow.Year,
+                        datenow.Month,
+                        datenow.Day,
                         ktTime.Hour,
                         ktTime.Minute,
                         0
@@ -193,7 +194,7 @@ namespace WinformGoshi.Forms.Dashboard
 
                         if (ktTime < bdTime) 
                         {
-                            var preDay = dtpSearch.Value.AddDays(-1);
+                            var preDay = datenow.AddDays(-1);
                             timebd = new DateTime(
                                 preDay.Year,
                                 preDay.Month,
@@ -206,9 +207,9 @@ namespace WinformGoshi.Forms.Dashboard
                         else
                         {
                             timebd = new DateTime(
-                                dtpSearch.Value.Year,
-                                dtpSearch.Value.Month,
-                                dtpSearch.Value.Day,
+                                datenow.Year,
+                                datenow.Month,
+                                datenow.Day,
                                 bdTime.Hour,
                                 bdTime.Minute,
                                 0
@@ -302,7 +303,7 @@ namespace WinformGoshi.Forms.Dashboard
             //chart1.Series["PLAN"].IsValueShownAsLabel = true;
             planSeries.Points.Clear();
 
-            DateTime today = dtpSearch.Value;
+            DateTime today = datenow;
 
             DateTime? prevTime = null;
             DateTime curDay = today;
@@ -313,13 +314,13 @@ namespace WinformGoshi.Forms.Dashboard
             {
                 var tsStart = TimeSpan.Parse(item.start);
                 var tsEnd = TimeSpan.Parse(item.end);
-                var tscheck = TimeSpan.Parse("18:01:00");
+                var tscheck = TimeSpan.Parse(timekt.ToString("HH:mm:ss"));
 
                 DateTime start = curDay.Date.Add(tsStart);
                 DateTime end = curDay.Date.Add(tsEnd);
 
                 // Nếu end < tscheck → tức là qua ngày
-                if (tsEnd >= tscheck)
+                if (tsEnd > tscheck)
                 {
                     end = curDay.AddDays(-1).Date.Add(tsEnd);
                 }
@@ -327,7 +328,7 @@ namespace WinformGoshi.Forms.Dashboard
                 {
                     end = curDay.Date.Add(tsEnd);
                 }
-                if (tsStart >= tscheck)
+                if (tsStart > tscheck)
                 {
                     start = curDay.AddDays(-1).Date.Add(tsStart);
                 }
@@ -385,123 +386,195 @@ namespace WinformGoshi.Forms.Dashboard
 
             // data ACT+SuCo
             List<DMStatusinfo> lsstatus1 = frmDashboardTTSXServices.getDSStatusinfo(timebd, timekt, mmtb);
-            // lọc trang thái dừng 2p
+            // lọc trang thái dừng và lỗi
             DMStatusinfo dmstatus = null;
             List<DMStatusinfo> lsstatus = new List<DMStatusinfo>();
-            if (lsstatus1.Count > 0)
+
+            //filter TT
+            try
             {
-                //dmstatus = new DMStatusinfo()
-                //{
-                //    id = lsstatus1[0].id,
-                //    machinecode = lsstatus1[0].machinecode,
-                //    status = lsstatus1[0].status,
-                //    created_at = lsstatus1[0].created_at,
-                //    error_code = lsstatus1[0].error_code,
-                //    stoppagereason_id = lsstatus1[0].stoppagereason_id,
-                //    shifttimetableexception_id = lsstatus1[0].shifttimetableexception_id,
-                //    stop_name = lsstatus1[0].stop_name,
-                //    shifttimetableexception_name = lsstatus1[0].shifttimetableexception_name
-                //};
-                //lsstatus.Add(dmstatus);
-                for (int i = 0; i < lsstatus1.Count; i++)
+                if (lsstatus1.Count > 0)
                 {
-                    var current = lsstatus1[i];
-                    var next = lsstatus1[i];
-                    var nextMC = lsstatus1[i];
-                    if(i != lsstatus1.Count - 1)
+                    for (int i = 0; i < lsstatus1.Count; i++)
                     {
-                        next = lsstatus1[i + 1];
-                        nextMC = lsstatus1[i+1];
-                    }
-                        
-
-                    // Trường hợp MAY_DUNG kéo dài hơn 2 phút
-                    if (current.status == "MAY_DUNG" || current.status == "KHONG_CO_TRANG_THAI")
-                    {
-                        //for (int j = i + 1; j < lsstatus1.Count; j++)
-                        //{
-                        //    if (lsstatus1[j].status == "MAY_CHAY")
-                        //    {
-                        //        nextMC = lsstatus1[j];
-                        //        break;
-                        //    }
-                        //}
-
-                        var duration = (nextMC.created_at - current.created_at).TotalSeconds;
-
-                        if (duration == 0 && DateTime.Now < timekt)
+                        var current = lsstatus1[i];
+                        var next = lsstatus1[i];
+                        var nextMC = lsstatus1[i];
+                        if (i != lsstatus1.Count - 1)
                         {
-                            duration = (DateTime.Now - current.created_at).TotalSeconds;
+                            next = lsstatus1[i + 1];
+                            nextMC = lsstatus1[i + 1];
                         }
 
-                        if (duration > 300)
+                        // Trường hợp MAY_DUNG kéo dài hơn 2 phút
+                        if (current.status == "MAY_DUNG" || current.status == "KHONG_CO_TRANG_THAI")
                         {
-                            // Thêm trạng thái MAY_DUNG
-                            lsstatus.Add(CloneStatus(current));
+                            var duration = (nextMC.created_at - current.created_at).TotalSeconds;
 
-                            // Nếu trạng thái tiếp theo là MAY_CHAY thì thêm nó để đánh dấu kết thúc
-                            if (next.status == "MAY_CHAY")
+                            if (duration == 0 && DateTime.Now < timekt)
                             {
-                                lsstatus.Add(CloneStatus(next));
+                                duration = (DateTime.Now - current.created_at).TotalSeconds;
                             }
-                            // Bỏ qua các trạng thái MAY_DUNG liên tiếp tiếp theo
-                            while (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status == "MAY_DUNG" || lsstatus1[i + 1].status == "KHONG_CO_TRANG_THAI"))
-                            {
-                                i++;
-                            }
-                            // Thêm máy chạy **sau khi kết thúc dừng** nếu có
-                            if (i + 1 < lsstatus1.Count && lsstatus1[i + 1].status == "MAY_CHAY")
-                            {
-                                lsstatus.Add(CloneStatus(lsstatus1[i + 1]));
-                            }
-                            if (lsstatus.Count > 1)
-                            {
-                                timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
-                            }
-                        }
-                    }
-                    // Trường hợp MAY_LOI: luôn ghi lại
-                    else if (current.status == "MAY_LOI")
-                    {
-                        lsstatus.Add(CloneStatus(current));
 
-                        // Chỉ thêm nếu trạng thái tiếp theo là MAY_CHAY (bỏ qua MAY_DUNG)
-                        //if (next.status == "MAY_CHAY")
-                        //{
-                        //    lsstatus.Add(CloneStatus(next));
-                        //}
-                        for (int j = i + 1; j < lsstatus1.Count; j++)
-                        {
-                            if (lsstatus1[j].status == "MAY_CHAY")
+                            if (duration > 300)
                             {
-                                lsstatus.Add(CloneStatus(lsstatus1[j]));
-                                break;
-                            }else if (lsstatus1[j].status == "MAY_LOI")
-                            {
-                                break;
-                            }
-                            else if (lsstatus1[j].status == "MAY_DUNG" || lsstatus1[j].status == "KHONG_CO_TRANG_THAI")
-                            {
-                                if (j != lsstatus1.Count - 1)
+                                // Thêm trạng thái MAY_DUNG
+                                lsstatus.Add(CloneStatus(current));
+
+                                // Nếu trạng thái tiếp theo là MAY_CHAY thì thêm nó để đánh dấu kết thúc
+                                if (next.status == "MAY_CHAY")
                                 {
-                                    var nextMD = lsstatus1[j+1];
-                                    var duration = (nextMD.created_at - lsstatus1[j].created_at).TotalSeconds;
-                                    if (duration > 300)
+                                    lsstatus.Add(CloneStatus(next));
+                                }
+                                // Bỏ qua các trạng thái MAY_DUNG liên tiếp tiếp theo
+                                while (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status == "MAY_DUNG" || lsstatus1[i + 1].status == "KHONG_CO_TRANG_THAI"))
+                                {
+                                    i++;
+                                }
+                                // Thêm máy chạy **sau khi kết thúc dừng** nếu có
+                                if (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status != "MAY_DUNG" || lsstatus1[i + 1].status != "KHONG_CO_TRANG_THAI"))
+                                {
+                                    // KIểm tra nếu máy lỗi < 120 thì next đến máy chạy nếu > 120 thì thoát
+                                    if (lsstatus1[i + 1].status == "MAY_LOI")
                                     {
-                                        //lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                        current = lsstatus1[i + 1];
+                                        if (i != lsstatus1.Count - 1)
+                                        {
+                                            for (int j = i + 1; j < lsstatus1.Count; j++)
+                                            {
+                                                if (lsstatus1[j].status != "MAY_LOI")
+                                                {
+                                                    nextMC = lsstatus1[j];
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        duration = (nextMC.created_at - current.created_at).TotalSeconds;
+
+                                        if (duration == 0 && DateTime.Now < timekt)
+                                        {
+                                            duration = (DateTime.Now - current.created_at).TotalSeconds;
+                                        }
+                                        if (duration < 120)
+                                        {
+                                            for (int j = i + 1; j < lsstatus1.Count; j++)
+                                            {
+                                                if (lsstatus1[j].status == "MAY_CHAY")
+                                                {
+                                                    lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                        lsstatus.Add(CloneStatus(lsstatus1[i + 1]));
+                                }
+                                if (lsstatus.Count > 1)
+                                {
+                                    timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                                }
+                            }
+                        }
+                        // Trường hợp MAY_LOI
+                        else if (current.status == "MAY_LOI")
+                        {
+                            if (i != lsstatus1.Count - 1)
+                            {
+                                for (int j = i + 1; j < lsstatus1.Count; j++)
+                                {
+                                    if (lsstatus1[j].status != "MAY_LOI")
+                                    {
+                                        nextMC = lsstatus1[j];
                                         break;
                                     }
                                 }
-                                
                             }
-                            
-                        }
-                        if (lsstatus.Count > 1)
-                        {
-                            timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+
+                            var duration = (nextMC.created_at - current.created_at).TotalSeconds;
+
+                            if (duration == 0 && DateTime.Now < timekt)
+                            {
+                                duration = (DateTime.Now - current.created_at).TotalSeconds;
+                            }
+
+                            if (duration >= 120)
+                            {
+                                lsstatus.Add(CloneStatus(current));
+
+                                // Chỉ thêm nếu trạng thái tiếp theo là MAY_CHAY (bỏ qua MAY_DUNG)
+                                //if (next.status == "MAY_CHAY")
+                                //{
+                                //    lsstatus.Add(CloneStatus(next));
+                                //}
+                                for (int j = i + 1; j < lsstatus1.Count; j++)
+                                {
+                                    if (lsstatus1[j].status == "MAY_CHAY")
+                                    {
+                                        lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                        break;
+                                    }
+                                    else if (lsstatus1[j].status == "MAY_LOI")
+                                    {
+                                        break;
+                                    }
+                                    else if (lsstatus1[j].status == "MAY_DUNG" || lsstatus1[j].status == "KHONG_CO_TRANG_THAI")
+                                    {
+                                        if (j != lsstatus1.Count - 1)
+                                        {
+                                            var nextMD = lsstatus1[j + 1];
+                                            var durationd = (nextMD.created_at - lsstatus1[j].created_at).TotalSeconds;
+                                            if (durationd > 300)
+                                            {
+                                                //lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                while (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status == "MAY_DUNG" || lsstatus1[j + 1].status == "KHONG_CO_TRANG_THAI"))
+                                                {
+                                                    j++;
+                                                }
+                                                if (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status != "MAY_DUNG" || lsstatus1[j + 1].status != "KHONG_CO_TRANG_THAI"))
+                                                {
+                                                    if (lsstatus1[j + 1].status == "MAY_LOI")
+                                                    {
+                                                        break;
+                                                    }
+                                                    lsstatus.Add(CloneStatus(lsstatus1[j + 1]));
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                                if (lsstatus.Count > 1)
+                                {
+                                    timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
+                                }
+                            }
+                            else if(lsstatus.Count > 0)
+                            {
+                                if (lsstatus.LastOrDefault().status != "MAY_CHAY")
+                                {
+                                    for (int j = i + 1; j < lsstatus1.Count; j++)
+                                    {
+                                        if (lsstatus1[j].status == "MAY_CHAY")
+                                        {
+                                            lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             List<DMCounterinfo> lscounter = frmDashboardTTSXServices.getDSCounterinfo(timebd, timekt, mmtb);
@@ -725,17 +798,17 @@ namespace WinformGoshi.Forms.Dashboard
 
                     TimeSpan tsStart = TimeSpan.Parse(item.start);
                     TimeSpan tsEnd = TimeSpan.Parse(item.end);
-                    var tscheck = TimeSpan.Parse("18:00:00");
+                    var tscheck = TimeSpan.Parse(timekt.ToString("HH:mm:ss"));
 
                     // Nếu end <= start thì end là ngày hôm sau
-                    DateTime startTime = DateTime.ParseExact($"{dtpSearch.Value:yyyy-MM-dd} {item.start}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-                    DateTime endTime = DateTime.ParseExact($"{dtpSearch.Value:yyyy-MM-dd} {item.end}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                    DateTime startTime = DateTime.ParseExact($"{datenow:yyyy-MM-dd} {item.start}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                    DateTime endTime = DateTime.ParseExact($"{datenow:yyyy-MM-dd} {item.end}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
-                    if (TimeSpan.Parse(startTime.ToString("HH:mm:ss")) >= tscheck)
+                    if (TimeSpan.Parse(startTime.ToString("HH:mm:ss")) > tscheck)
                     {
                         startTime = startTime.AddDays(-1); // Nếu end < start thì thực sự là qua ngày hôm sau
                     }
-                    if (TimeSpan.Parse(endTime.ToString("HH:mm:ss")) >= tscheck)
+                    if (TimeSpan.Parse(endTime.ToString("HH:mm:ss")) > tscheck)
                     {
                         endTime = endTime.AddDays(-1);
                     }
@@ -1018,7 +1091,7 @@ namespace WinformGoshi.Forms.Dashboard
                         {
                             if (lsstatus[j].status == "MAY_DUNG" && lsstatus[j].id == filteredList.FirstOrDefault().id)
                             {
-                                if (i + 1 == lsstatus.Count)
+                                if (j + 1 == lsstatus.Count)
                                 {
                                     if (DateTime.Now <= timekt)
                                     {
@@ -1178,7 +1251,7 @@ namespace WinformGoshi.Forms.Dashboard
         {
             if (cbbChuyen.DataSource != null)
             {
-                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
+                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(datenow, cbbChuyen.SelectedValue.ToString());
                 if (lsmodel.Count > 0)
                 {
                     cbbModel.ValueMember = "id";
@@ -1186,7 +1259,7 @@ namespace WinformGoshi.Forms.Dashboard
                     cbbModel.DataSource = lsmodel;
                     cbbModel.SelectedIndex = 0;
 
-                    List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
+                    List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(datenow, cbbChuyen.SelectedValue.ToString());
                     if (lsca.Count > 0)
                     {
                         cbbCa.ValueMember = "id";
@@ -1198,6 +1271,12 @@ namespace WinformGoshi.Forms.Dashboard
                     loaddata(null, null);
                 }
             }
+        }
+
+        private List<DMStatusinfo> statusFilter(List<DMStatusinfo> lsstatus1, List<DMStatusinfo> lsstatus, DateTime timekt)
+        {
+            
+            return lsstatus;
         }
 
         private void frmDashboardTTSX_Load(object sender, EventArgs e)
@@ -1210,40 +1289,7 @@ namespace WinformGoshi.Forms.Dashboard
 
         private void dtpSearch_CloseUp(object sender, EventArgs e)
         {
-            List<DMChuyen> lsChuyen = frmDashboardTTSXServices.getDSChuyen(dtpSearch.Value);
-            if (lsChuyen.Count > 0)
-            {
-                cbbChuyen.ValueMember = "id";
-                cbbChuyen.DisplayMember = "name";
-                cbbChuyen.DataSource = lsChuyen;
-                cbbChuyen.SelectedIndex = 0;
-            }
-            else
-            {
-                cbbChuyen.DataSource = null;
-            }
-            if (cbbChuyen.DataSource != null)
-            {
-                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
-                if (lsmodel.Count > 0)
-                {
-                    cbbModel.ValueMember = "id";
-                    cbbModel.DisplayMember = "name";
-                    cbbModel.DataSource = lsmodel;
-                    cbbModel.SelectedIndex = 0;
-
-                    List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(dtpSearch.Value, cbbChuyen.SelectedValue.ToString());
-                    if (lsca.Count > 0)
-                    {
-                        cbbCa.ValueMember = "id";
-                        cbbCa.DisplayMember = "name";
-                        cbbCa.DataSource = lsca;
-                        cbbCa.SelectedIndex = 0;
-                    }
-
-                    loaddata(null, null);
-                }
-            }
+            
         }
 
         private void cbbCa_SelectedIndexChanged(object sender, EventArgs e)
@@ -1273,6 +1319,57 @@ namespace WinformGoshi.Forms.Dashboard
         {
             dgvKeHoachAndThucTe.ClearSelection();
             dgvKeHoachAndThucTe.CurrentCell = null;
+        }
+
+        private void btnBackDay_Click(object sender, EventArgs e)
+        {
+            datenow = datenow.AddDays(-1);
+            dtpSearch.Value = datenow;
+        }
+
+        private void btnNextDay_Click(object sender, EventArgs e)
+        {
+            datenow = datenow.AddDays(1);
+            dtpSearch.Value = datenow;
+        }
+
+        private void dtpSearch_ValueChanged(object sender, EventArgs e)
+        {
+            datenow = dtpSearch.Value;
+            List<DMChuyen> lsChuyen = frmDashboardTTSXServices.getDSChuyen(datenow);
+            if (lsChuyen.Count > 0)
+            {
+                cbbChuyen.ValueMember = "id";
+                cbbChuyen.DisplayMember = "name";
+                cbbChuyen.DataSource = lsChuyen;
+                cbbChuyen.SelectedIndex = 0;
+            }
+            else
+            {
+                cbbChuyen.DataSource = null;
+            }
+            if (cbbChuyen.DataSource != null)
+            {
+                List<DMModel> lsmodel = frmDashboardTTSXServices.getDSModel(datenow, cbbChuyen.SelectedValue.ToString());
+                if (lsmodel.Count > 0)
+                {
+                    cbbModel.ValueMember = "id";
+                    cbbModel.DisplayMember = "name";
+                    cbbModel.DataSource = lsmodel;
+                    cbbModel.SelectedIndex = 0;
+
+                    List<DMShift> lsca = frmDashboardTTSXServices.getIdCa(datenow, cbbChuyen.SelectedValue.ToString());
+                    if (lsca.Count > 0)
+                    {
+                        cbbCa.ValueMember = "id";
+                        cbbCa.DisplayMember = "name";
+                        cbbCa.DataSource = lsca;
+                        cbbCa.SelectedIndex = 0;
+                    }
+
+                    loaddata(null, null);
+                }
+            }
         }
     }
 }
