@@ -989,14 +989,14 @@ namespace WinformGoshi.Forms.Dashboard
                 double.TryParse(lbACT.Text, out sllbact);
                 double.TryParse(lbPlan.Text, out sllbPlan);
                 lbDIF.Text = (sllbact - sllbPlan).ToString();
-                if (sllbact - sllbPlan > 0)
-                    lbDIF.ForeColor = Color.Green;
+                if (sllbact - sllbPlan >= 0)
+                    lbDIF.ForeColor = Color.Blue;
                 else
                     lbDIF.ForeColor = Color.Red;
                 lbTotalPlan.Text = slkh.ToString();
                 lbTotalDIF.Text = (int.Parse(lbTotalACT.Text) - int.Parse(lbTotalPlan.Text)).ToString();
-                if ((int.Parse(lbTotalACT.Text) - int.Parse(lbTotalPlan.Text)) > 0)
-                    lbTotalDIF.ForeColor = Color.Green;
+                if ((int.Parse(lbTotalACT.Text) - int.Parse(lbTotalPlan.Text)) >= 0)
+                    lbTotalDIF.ForeColor = Color.Blue;
                 else
                     lbTotalDIF.ForeColor = Color.Red;
             }

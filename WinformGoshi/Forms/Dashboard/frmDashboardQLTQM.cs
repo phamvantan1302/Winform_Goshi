@@ -25,7 +25,7 @@ namespace WinformGoshi.Forms.Dashboard
         {
             InitializeComponent();
             loaddata(null, null);
-            LBThang.Text = "Tháng " + DateTime.Now.Month.ToString();
+            dtpSearch.Value = DateTime.Now;
             //tRefreshData = new System.Windows.Forms.Timer();
             //tRefreshData.Tick += new EventHandler(loaddata);
             //tRefreshData.Interval = 30000;
@@ -60,11 +60,11 @@ namespace WinformGoshi.Forms.Dashboard
             //Data
             string valueThu = "", bdau = "", kthuc = "";
             double sumtimeact = 0, slTTtrongngay = 0;
-            DateTime timebd = DateTime.Now, timekt = DateTime.Now, date = DateTime.Now;
+            DateTime timebd = dtpSearch.Value, timekt = dtpSearch.Value, date = dtpSearch.Value;
             List<DMTimeByCa> getTimeCa = frmDashboardQLTQMServices.getDataCaKH(date);
             List<DMStatusinfo> lsstatus = frmDashboardQLTQMServices.getDSStatusinfo(date);
             List<DMCounterinfo> lscounter = frmDashboardQLTQMServices.getDSCounterinfo(date);
-            List<DMOrder> lsorder = frmDashboardQLTQMServices.getDataOrder(DateTime.Now);
+            List<DMOrder> lsorder = frmDashboardQLTQMServices.getDataOrder(dtpSearch.Value);
             List<DMPlan> lsacthc = new List<DMPlan>();
             DMPlan dMacthc = new DMPlan();
             List<DMPlan> lsactd = new List<DMPlan>();
@@ -120,7 +120,7 @@ namespace WinformGoshi.Forms.Dashboard
                 //Data
                 for (int day = 1; day <= 31; day++)
                 {
-                    DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
+                    DateTime currentDate = new DateTime(date.Year, date.Month, day);
                     double sumtimeca = 0, sumtimekh = 0, totalslca = 0;
                     sumtimeact = 0;
                     slTTtrongngay = 0;
@@ -398,6 +398,18 @@ namespace WinformGoshi.Forms.Dashboard
         {
             dgv.ClearSelection();
             dgv.CurrentCell = null;
+        }
+
+        private void btnBackDay_Click(object sender, EventArgs e)
+        {
+            dtpSearch.Value = dtpSearch.Value.AddMonths(-1);
+            loaddata(null, null);
+        }
+
+        private void btnNextDay_Click(object sender, EventArgs e)
+        {
+            dtpSearch.Value = dtpSearch.Value.AddMonths(1);
+            loaddata(null, null);
         }
     }
 }

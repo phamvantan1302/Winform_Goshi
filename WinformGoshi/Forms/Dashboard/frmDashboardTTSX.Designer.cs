@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series22 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series23 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnNextDay = new System.Windows.Forms.Button();
+            this.btnBackDay = new System.Windows.Forms.Button();
             this.dgvKeHoachAndThucTe = new System.Windows.Forms.DataGridView();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -96,8 +98,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnBackDay = new System.Windows.Forms.Button();
-            this.btnNextDay = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -215,6 +215,30 @@
             this.panel2.Size = new System.Drawing.Size(1586, 634);
             this.panel2.TabIndex = 7;
             // 
+            // btnNextDay
+            // 
+            this.btnNextDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnNextDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextDay.Location = new System.Drawing.Point(227, 7);
+            this.btnNextDay.Name = "btnNextDay";
+            this.btnNextDay.Size = new System.Drawing.Size(21, 21);
+            this.btnNextDay.TabIndex = 57;
+            this.btnNextDay.Text = ">";
+            this.btnNextDay.UseVisualStyleBackColor = true;
+            this.btnNextDay.Click += new System.EventHandler(this.btnNextDay_Click);
+            // 
+            // btnBackDay
+            // 
+            this.btnBackDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnBackDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBackDay.Location = new System.Drawing.Point(99, 7);
+            this.btnBackDay.Name = "btnBackDay";
+            this.btnBackDay.Size = new System.Drawing.Size(21, 21);
+            this.btnBackDay.TabIndex = 56;
+            this.btnBackDay.Text = "<";
+            this.btnBackDay.UseVisualStyleBackColor = true;
+            this.btnBackDay.Click += new System.EventHandler(this.btnBackDay_Click);
+            // 
             // dgvKeHoachAndThucTe
             // 
             this.dgvKeHoachAndThucTe.AllowUserToAddRows = false;
@@ -230,14 +254,14 @@
             this.dgvKeHoachAndThucTe.Location = new System.Drawing.Point(898, 477);
             this.dgvKeHoachAndThucTe.Name = "dgvKeHoachAndThucTe";
             this.dgvKeHoachAndThucTe.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvKeHoachAndThucTe.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvKeHoachAndThucTe.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvKeHoachAndThucTe.RowHeadersVisible = false;
             this.dgvKeHoachAndThucTe.Size = new System.Drawing.Size(651, 145);
             this.dgvKeHoachAndThucTe.TabIndex = 55;
@@ -618,7 +642,7 @@
             this.lbTotalACT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTotalACT.BackColor = System.Drawing.SystemColors.Control;
             this.lbTotalACT.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTotalACT.ForeColor = System.Drawing.Color.MediumBlue;
+            this.lbTotalACT.ForeColor = System.Drawing.Color.Green;
             this.lbTotalACT.Location = new System.Drawing.Point(1495, 114);
             this.lbTotalACT.Name = "lbTotalACT";
             this.lbTotalACT.Size = new System.Drawing.Size(53, 42);
@@ -631,6 +655,7 @@
             this.lbTotalPlan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTotalPlan.BackColor = System.Drawing.SystemColors.Control;
             this.lbTotalPlan.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotalPlan.ForeColor = System.Drawing.Color.MediumBlue;
             this.lbTotalPlan.Location = new System.Drawing.Point(1495, 70);
             this.lbTotalPlan.Name = "lbTotalPlan";
             this.lbTotalPlan.Size = new System.Drawing.Size(53, 42);
@@ -692,7 +717,7 @@
             this.lbACT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbACT.BackColor = System.Drawing.SystemColors.Control;
             this.lbACT.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbACT.ForeColor = System.Drawing.Color.MediumBlue;
+            this.lbACT.ForeColor = System.Drawing.Color.Green;
             this.lbACT.Location = new System.Drawing.Point(1340, 114);
             this.lbACT.Name = "lbACT";
             this.lbACT.Size = new System.Drawing.Size(53, 42);
@@ -705,6 +730,7 @@
             this.lbPlan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPlan.BackColor = System.Drawing.SystemColors.Control;
             this.lbPlan.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPlan.ForeColor = System.Drawing.Color.MediumBlue;
             this.lbPlan.Location = new System.Drawing.Point(1340, 70);
             this.lbPlan.Name = "lbPlan";
             this.lbPlan.Size = new System.Drawing.Size(53, 42);
@@ -806,51 +832,51 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea6.AxisY.MajorGrid.Enabled = false;
-            chartArea6.Name = "ChartArea1";
-            chartArea6.Position.Auto = false;
-            chartArea6.Position.Height = 94F;
-            chartArea6.Position.Width = 100F;
-            chartArea6.Position.Y = 3F;
-            this.chart1.ChartAreas.Add(chartArea6);
-            legend6.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
-            legend6.Name = "Legend1";
-            legend6.Position.Auto = false;
-            legend6.Position.Height = 17.99308F;
-            legend6.Position.Width = 11.39073F;
-            legend6.Position.X = 13F;
-            legend6.Position.Y = 3F;
-            this.chart1.Legends.Add(legend6);
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.Name = "ChartArea1";
+            chartArea1.Position.Auto = false;
+            chartArea1.Position.Height = 94F;
+            chartArea1.Position.Width = 100F;
+            chartArea1.Position.Y = 3F;
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Left;
+            legend1.Name = "Legend1";
+            legend1.Position.Auto = false;
+            legend1.Position.Height = 17.99308F;
+            legend1.Position.Width = 11.39073F;
+            legend1.Position.X = 13F;
+            legend1.Position.Y = 3F;
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(3, 40);
             this.chart1.Name = "chart1";
-            series21.BorderWidth = 2;
-            series21.ChartArea = "ChartArea1";
-            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series21.Color = System.Drawing.Color.Blue;
-            series21.Legend = "Legend1";
-            series21.Name = "PLAN";
-            series22.BorderWidth = 2;
-            series22.ChartArea = "ChartArea1";
-            series22.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series22.Color = System.Drawing.Color.Green;
-            series22.Legend = "Legend1";
-            series22.Name = "ACT";
-            series23.BorderWidth = 2;
-            series23.ChartArea = "ChartArea1";
-            series23.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series23.Color = System.Drawing.Color.Red;
-            series23.Legend = "Legend1";
-            series23.Name = "SỰ CỐ";
-            series24.BorderWidth = 2;
-            series24.ChartArea = "ChartArea1";
-            series24.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series24.Color = System.Drawing.Color.Orange;
-            series24.Legend = "Legend1";
-            series24.Name = "MÁY DỪNG";
-            this.chart1.Series.Add(series21);
-            this.chart1.Series.Add(series22);
-            this.chart1.Series.Add(series23);
-            this.chart1.Series.Add(series24);
+            series1.BorderWidth = 2;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Color = System.Drawing.Color.Blue;
+            series1.Legend = "Legend1";
+            series1.Name = "PLAN";
+            series2.BorderWidth = 2;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Color = System.Drawing.Color.Green;
+            series2.Legend = "Legend1";
+            series2.Name = "ACT";
+            series3.BorderWidth = 2;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Color = System.Drawing.Color.Red;
+            series3.Legend = "Legend1";
+            series3.Name = "SỰ CỐ";
+            series4.BorderWidth = 2;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Orange;
+            series4.Legend = "Legend1";
+            series4.Name = "MÁY DỪNG";
+            this.chart1.Series.Add(series1);
+            this.chart1.Series.Add(series2);
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(1189, 437);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
@@ -909,30 +935,6 @@
             this.label3.Size = new System.Drawing.Size(56, 16);
             this.label3.TabIndex = 0;
             this.label3.Text = "NGÀY: ";
-            // 
-            // btnBackDay
-            // 
-            this.btnBackDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btnBackDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackDay.Location = new System.Drawing.Point(99, 7);
-            this.btnBackDay.Name = "btnBackDay";
-            this.btnBackDay.Size = new System.Drawing.Size(21, 21);
-            this.btnBackDay.TabIndex = 56;
-            this.btnBackDay.Text = "<";
-            this.btnBackDay.UseVisualStyleBackColor = true;
-            this.btnBackDay.Click += new System.EventHandler(this.btnBackDay_Click);
-            // 
-            // btnNextDay
-            // 
-            this.btnNextDay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btnNextDay.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextDay.Location = new System.Drawing.Point(227, 7);
-            this.btnNextDay.Name = "btnNextDay";
-            this.btnNextDay.Size = new System.Drawing.Size(21, 21);
-            this.btnNextDay.TabIndex = 57;
-            this.btnNextDay.Text = ">";
-            this.btnNextDay.UseVisualStyleBackColor = true;
-            this.btnNextDay.Click += new System.EventHandler(this.btnNextDay_Click);
             // 
             // frmDashboardTTSX
             // 
