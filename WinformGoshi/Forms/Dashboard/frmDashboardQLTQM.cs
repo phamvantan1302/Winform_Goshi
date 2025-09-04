@@ -120,12 +120,39 @@ namespace WinformGoshi.Forms.Dashboard
                 //Data
                 for (int day = 1; day <= 31; day++)
                 {
-                    DateTime currentDate = new DateTime(date.Year, date.Month, day);
                     double sumtimeca = 0, sumtimekh = 0, totalslca = 0;
                     sumtimeact = 0;
                     slTTtrongngay = 0;
                     string ca = "";
                     bool checkca = false;
+
+                    // TH date > date trong tháng
+                    if (day > DateTime.DaysInMonth(date.Year, date.Month))
+                    {
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "S4",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "HC",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                        continue;
+                    }
+
+                    DateTime currentDate = new DateTime(date.Year, date.Month, day);
 
                     var dailyData = lsorder
                     .Where(x => x.fromDate.Date == currentDate)

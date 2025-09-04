@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using WinformGoshi.Models.dashboard;
 using WinformGoshi.Sevices.dashboard;
 using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
@@ -1176,9 +1177,26 @@ namespace WinformGoshi.Forms.Dashboard
 
                 if (DateTime.Now >= timekt)
                 {
+                    double sumtimekh = 0;
+                    if (timekt < timebd)
+                    {
+                        timebd = timebd.AddDays(-1);
+                        if ((timekt - timebd).TotalHours < 10)
+                            sumtimekh = 435;
+                        else
+                            sumtimekh = 615;
+                    }
+                    else
+                    {
+                        if ((timekt - timebd).TotalHours < 10)
+                            sumtimekh = 480;
+                        else
+                            sumtimekh = 660;
+                    }
                     double a = (timekt - timebd).TotalMinutes - 60;
-                    lbTiLeChayChuyen.Text = Math.Round(((a - (sumCol2+ sumtgloi)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
-                    //lbTiLeChayChuyen.Text = Math.Round(((a - (timedungByPhut - 60)) / (timekt - timebd).TotalMinutes) * 100, 1).ToString() + "%";
+                    double b = double.Parse(lbTotalACT.Text);
+                    lbTiLeChayChuyen.Text = Math.Round((b*35 / (sumtimekh*60)) * 100, 1).ToString() + "%";
+                    //lbTiLeChayChuyen.Text = Math.Round(((a - (sumCol2+ sumtgloi)) / (timekt - timebd).TotalSeconds) * 100, 1).ToString() + "%";
                     if (Math.Round((sumtimeact / 60), 0) > (timekt - timebd).TotalMinutes)
                         lbTyLeHT.Text = "Không đạt";
                     else
