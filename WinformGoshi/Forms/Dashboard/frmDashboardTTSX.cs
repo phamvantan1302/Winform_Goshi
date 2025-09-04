@@ -1178,9 +1178,9 @@ namespace WinformGoshi.Forms.Dashboard
                 if (DateTime.Now >= timekt)
                 {
                     double sumtimekh = 0;
-                    if (timekt < timebd)
+                    if (timekt.Date != timebd.Date)
                     {
-                        timebd = timebd.AddDays(-1);
+                        //timebd = timebd.AddDays(-1);
                         if ((timekt - timebd).TotalHours < 10)
                             sumtimekh = 435;
                         else
