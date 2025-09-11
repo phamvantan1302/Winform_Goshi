@@ -407,7 +407,7 @@ namespace WinformGoshi.Forms.Dashboard
                             nextMC = lsstatus1[i + 1];
                         }
 
-                        // Trường hợp MAY_DUNG kéo dài hơn 2 phút
+                        // Trường hợp MAY_DUNG kéo dài hơn 5 phút
                         if (current.status == "MAY_DUNG" || current.status == "KHONG_CO_TRANG_THAI")
                         {
                             var duration = (nextMC.created_at - current.created_at).TotalSeconds;
@@ -415,6 +415,10 @@ namespace WinformGoshi.Forms.Dashboard
                             if (duration == 0 && DateTime.Now < timekt)
                             {
                                 duration = (DateTime.Now - current.created_at).TotalSeconds;
+                            }
+                            else if(duration == 0 && DateTime.Now >= timekt)
+                            {
+                                duration = (timekt - current.created_at).TotalSeconds;
                             }
 
                             if (duration > 300)
@@ -480,23 +484,36 @@ namespace WinformGoshi.Forms.Dashboard
                         // Trường hợp MAY_LOI
                         else if (current.status == "MAY_LOI")
                         {
+                            int countttnext = 0;
                             if (i != lsstatus1.Count - 1)
                             {
                                 for (int j = i + 1; j < lsstatus1.Count; j++)
                                 {
-                                    if (lsstatus1[j].status != "MAY_LOI")
-                                    {
+                                    countttnext = j;
+                                    //if (lsstatus1[j].status != "MAY_LOI")
+                                    //{
                                         nextMC = lsstatus1[j];
                                         break;
-                                    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    nextMC = lsstatus1[j];
+                                    //    //current = lsstatus1[j];
+                                    //    break;
+                                    //}
                                 }
-                            }
+                            }else
+                                countttnext = i;
 
                             var duration = (nextMC.created_at - current.created_at).TotalSeconds;
 
-                            if (duration == 0 && DateTime.Now < timekt)
+                            if (duration == 0 && DateTime.Now < timekt && countttnext == lsstatus1.Count-1)
                             {
                                 duration = (DateTime.Now - current.created_at).TotalSeconds;
+                            }
+                            else if(duration == 0 && DateTime.Now >= timekt && countttnext == lsstatus1.Count-1)
+                            {
+                                duration = (timekt - current.created_at).TotalSeconds;
                             }
 
                             if (duration >= 120)
@@ -508,7 +525,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 //{
                                 //    lsstatus.Add(CloneStatus(next));
                                 //}
-                                for (int j = i + 1; j < lsstatus1.Count; j++)
+                                for (int j = countttnext; j < lsstatus1.Count; j++)
                                 {
                                     if (lsstatus1[j].status == "MAY_CHAY")
                                     {
@@ -528,23 +545,24 @@ namespace WinformGoshi.Forms.Dashboard
                                             if (durationd > 300)
                                             {
                                                 //lsstatus.Add(CloneStatus(lsstatus1[j]));
+                                                i = j-1;
                                                 break;
                                             }
-                                            else
-                                            {
-                                                while (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status == "MAY_DUNG" || lsstatus1[j + 1].status == "KHONG_CO_TRANG_THAI"))
-                                                {
-                                                    j++;
-                                                }
-                                                if (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status != "MAY_DUNG" || lsstatus1[j + 1].status != "KHONG_CO_TRANG_THAI"))
-                                                {
-                                                    if (lsstatus1[j + 1].status == "MAY_LOI")
-                                                    {
-                                                        break;
-                                                    }
-                                                    lsstatus.Add(CloneStatus(lsstatus1[j + 1]));
-                                                }
-                                            }
+                                            //else
+                                            //{
+                                                //while (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status == "MAY_DUNG" || lsstatus1[j + 1].status == "KHONG_CO_TRANG_THAI"))
+                                                //{
+                                                //    j++;
+                                                //}
+                                                //if (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status != "MAY_DUNG" || lsstatus1[j + 1].status != "KHONG_CO_TRANG_THAI"))
+                                                //{
+                                                //    if (lsstatus1[j + 1].status == "MAY_LOI")
+                                                //    {
+                                                //        break;
+                                                //    }
+                                                //    lsstatus.Add(CloneStatus(lsstatus1[j + 1]));
+                                                //}
+                                            //}
                                         }
 
                                     }
@@ -579,6 +597,9 @@ namespace WinformGoshi.Forms.Dashboard
             }
 
             List<DMCounterinfo> lscounter = frmDashboardTTSXServices.getDSCounterinfo(timebd, timekt, mmtb);
+            lscounter = lscounter
+                        .Where(x => x.quantity != 0)
+                        .ToList();
 
             dschart = new List<DMShowChart>();
             dschartError = new List<DMShowChart>();
@@ -611,7 +632,7 @@ namespace WinformGoshi.Forms.Dashboard
 
                 for (int i = 0; i < lsstatus.Count; i++)
                 {
-                    if (lsstatus[i].status == "MAY_DUNG")
+                    if (lsstatus[i].status == "MAY_DUNG" || lsstatus[i].status == "KHONG_CO_TRANG_THAI")
                     {
                         if (1==1)
                         {
@@ -669,7 +690,7 @@ namespace WinformGoshi.Forms.Dashboard
                             {
                                 dMShowChart.end = timekt.ToString("HH:mm");
                                 dMShowChart.slend = lscounter
-                                                    .Where(x => x.created_at <= timekt)
+                                                    .Where(x => x.created_at <= timekt && x.quantity > 0)
                                                     .OrderByDescending(x => x.created_at)
                                                     .FirstOrDefault()?.quantity ?? 0;
                                 sumtimeact = (timekt - lsstatus[i].created_at).TotalSeconds + sumtimeact;
@@ -678,7 +699,7 @@ namespace WinformGoshi.Forms.Dashboard
                             {
                                 dMShowChart.end = DateTime.Now.ToString("HH:mm");
                                 dMShowChart.slend = lscounter
-                                                    .Where(x => x.created_at <= DateTime.Now)
+                                                    .Where(x => x.created_at <= DateTime.Now && x.quantity > 0)
                                                     .OrderByDescending(x => x.created_at)
                                                     .FirstOrDefault()?.quantity ?? 0;
                                 sumtimeact = (DateTime.Now - lsstatus[i].created_at).TotalSeconds + sumtimeact;
@@ -690,7 +711,7 @@ namespace WinformGoshi.Forms.Dashboard
                         {
                             dMShowChart.end = lsstatus[i + 1].created_at.ToString("HH:mm");
                             dMShowChart.slend = lscounter
-                                                .Where(x => x.created_at <= lsstatus[i+1].created_at)
+                                                .Where(x => x.created_at <= lsstatus[i+1].created_at && x.quantity > 0)
                                                 .OrderByDescending(x => x.created_at)
                                                 .FirstOrDefault()?.quantity ?? 0;
                             sumtimeact = (lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalSeconds + sumtimeact;
@@ -753,7 +774,7 @@ namespace WinformGoshi.Forms.Dashboard
                                     else
                                         dmMayChay.end = DateTime.Now.ToString("HH:mm");
                                     dmMayChay.slend = lscounter
-                                                        .Where(x => x.created_at <= DateTime.Now)
+                                                        .Where(x => x.created_at <= DateTime.Now && x.quantity > 0)
                                                         .OrderByDescending(x => x.created_at)
                                                         .FirstOrDefault()?.quantity ?? 0; ;
                                 }
@@ -761,7 +782,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 {
                                     dmMayChay.end = lsstatus[j + 1].created_at.ToString("HH:mm");
                                     dmMayChay.slend = lscounter
-                                                        .Where(x => x.created_at <= lsstatus[j+1].created_at)
+                                                        .Where(x => x.created_at <= lsstatus[j+1].created_at && x.quantity > 0)
                                                         .OrderByDescending(x => x.created_at)
                                                         .FirstOrDefault()?.quantity ?? 0;
                                 }
@@ -831,7 +852,7 @@ namespace WinformGoshi.Forms.Dashboard
                         SuCoSeries.Points.Add(dungEnd);
                     }
 
-                    if (item.status == "MAY_DUNG")
+                    if (item.status == "MAY_DUNG" || item.status == "KHONG_CO_TRANG_THAI")
                     {
                         MAYDUNGSeries.Points.AddXY(startTime, item.slstart);
                         MAYDUNGSeries.Points.AddXY(endTime, item.slend);
@@ -1005,7 +1026,10 @@ namespace WinformGoshi.Forms.Dashboard
             
             // show table 1
             dgvDungThucTe.Rows.Clear();
-            dgvDungThucTe.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            dgvDungThucTe.Font = new Font("Times New Roman", 9, FontStyle.Regular);
+            dgvDungThucTe.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvDungThucTe.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvDungThucTe.Columns[3].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             int indexRow = 0;
             if (lsstatus.Count > 0)
             {
@@ -1073,7 +1097,10 @@ namespace WinformGoshi.Forms.Dashboard
 
             // show table 2
             dgvKeHoachAndThucTe.Rows.Clear();
-            dgvKeHoachAndThucTe.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            dgvKeHoachAndThucTe.Font = new Font("Times New Roman", 9, FontStyle.Regular);
+            dgvKeHoachAndThucTe.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvKeHoachAndThucTe.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvKeHoachAndThucTe.Columns[3].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             indexRow = 0;
             double sumCol2 = 0, sumtgloi = 0;
             if (lsstatus.Count > 0 && getTimeCa.Count > 0)
