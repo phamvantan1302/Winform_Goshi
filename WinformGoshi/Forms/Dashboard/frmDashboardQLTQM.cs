@@ -81,8 +81,8 @@ namespace WinformGoshi.Forms.Dashboard
             titleY2.ForeColor = Color.Black;
             titleY2.IsDockedInsideChartArea = false; // bỏ docking
             titleY2.Position.Auto = false;
-            titleY2.Position.X = 98;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
-            titleY2.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
+            titleY2.Position.X = 96;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY2.Position.Y = 2;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
             chart1.Titles.Add(titleY2);
 
             chart1.ChartAreas[0].AxisY.Minimum = 0;
@@ -100,8 +100,8 @@ namespace WinformGoshi.Forms.Dashboard
             titleY.ForeColor = Color.Black;
             titleY.IsDockedInsideChartArea = false; // bỏ docking
             titleY.Position.Auto = false;
-            titleY.Position.X = 2;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
-            titleY.Position.Y = 9;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
+            titleY.Position.X = 5;  // phần trăm chiều rộng chart (càng lớn càng sát phải)
+            titleY.Position.Y = 2;   // phần trăm chiều cao chart (càng nhỏ càng sát trên)
             chart1.Titles.Add(titleY);
 
             chart1.ChartAreas[0].AxisX.Minimum = 0.5;
@@ -120,12 +120,39 @@ namespace WinformGoshi.Forms.Dashboard
                 //Data
                 for (int day = 1; day <= 31; day++)
                 {
-                    DateTime currentDate = new DateTime(date.Year, date.Month, day);
                     double sumtimeca = 0, sumtimekh = 0, totalslca = 0;
                     sumtimeact = 0;
                     slTTtrongngay = 0;
                     string ca = "";
                     bool checkca = false;
+
+                    // TH date > date trong tháng
+                    if (day > DateTime.DaysInMonth(date.Year, date.Month))
+                    {
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "S4",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                        dMLV = new dataViewTable()
+                        {
+                            ngay = day,
+                            slplan = totalslca,
+                            slact = slTTtrongngay,
+                            calv = "HC",
+                            tyleht = "",
+                            tylecc = 0
+                        };
+                        lsLV.Add(dMLV);
+                        continue;
+                    }
+
+                    DateTime currentDate = new DateTime(date.Year, date.Month, day);
 
                     var dailyData = lsorder
                     .Where(x => x.fromDate.Date == currentDate)
@@ -216,7 +243,14 @@ namespace WinformGoshi.Forms.Dashboard
 
                                 var listSLTrongNgay = frmDashboardQLTQMServices.getSLByNgay(timebd, timekt);
                                 if(listSLTrongNgay.Count > 0)
-                                    slTTtrongngay = listSLTrongNgay.LastOrDefault().quantity;
+                                    if (listSLTrongNgay.LastOrDefault().quantity == 0)
+                                    {
+                                        slTTtrongngay = listSLTrongNgay[listSLTrongNgay.Count - 2].quantity;
+                                    }
+                                    else
+                                    {
+                                        slTTtrongngay = listSLTrongNgay.LastOrDefault().quantity;
+                                    }
                             }
 
                             //act
@@ -309,16 +343,22 @@ namespace WinformGoshi.Forms.Dashboard
 
                 tylekhSeries.EmptyPointStyle.BorderDashStyle = ChartDashStyle.Dash;
                 tylekhSeries.EmptyPointStyle.MarkerStyle = MarkerStyle.Cross;
-                tylekhSeries.IsValueShownAsLabel = true;
+                
+                tylekhSeries.BorderDashStyle = ChartDashStyle.Dash;
 
                 for (int day = 1; day <= 31; day++)
                 {
                     var dscc = lsLV.Where(x => x.ngay == day).ToList();
                     DataPoint ttkh = new DataPoint();
                     ttkh.SetValueXY(day, 85);
-                    ttkh.Label = $"{85}%";
                     tylekhSeries.Points.Add(ttkh);
+                    tylekhSeries.IsValueShownAsLabel = false;
 
+                    if (day == 31)
+                    {
+                        DataPoint lastPoint = tylekhSeries.Points[tylekhSeries.Points.Count - 1];
+                        lastPoint.Label = "85%";
+                    }
 
                     foreach (var item in dscc)
                     {
