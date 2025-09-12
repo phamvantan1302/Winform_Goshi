@@ -54,6 +54,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -105,6 +107,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -152,6 +156,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -197,6 +203,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -236,6 +244,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }

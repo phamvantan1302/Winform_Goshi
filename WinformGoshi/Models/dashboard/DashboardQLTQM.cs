@@ -18,6 +18,7 @@ namespace WinformGoshi.Models.dashboard
         public int id { get; set; }
         public double plannedquantity { get; set; }
         public DateTime fromDate { get; set; }
+        public DateTime toDate { get; set; }
         public int shift_id { get; set; }
     }
 

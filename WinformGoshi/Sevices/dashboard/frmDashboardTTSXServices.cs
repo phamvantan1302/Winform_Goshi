@@ -69,6 +69,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -103,6 +105,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -139,6 +143,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -173,6 +179,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -202,6 +210,8 @@ namespace WinformGoshi.Sevices.dashboard
                         {
                             ret = reader.IsDBNull(0) ? 0 : reader.GetDouble(0);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -235,6 +245,8 @@ namespace WinformGoshi.Sevices.dashboard
                         {
                             ret = reader.IsDBNull(0) ? "" : reader.GetString(0);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -281,6 +293,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -331,6 +345,8 @@ namespace WinformGoshi.Sevices.dashboard
                             };
                             ret.Add(item);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }
@@ -361,6 +377,8 @@ namespace WinformGoshi.Sevices.dashboard
                         {
                             ret = reader.IsDBNull(2) ? "" : reader.GetString(2);
                         }
+                        reader.Close();
+                        command.Dispose();
                     }
                 }
             }

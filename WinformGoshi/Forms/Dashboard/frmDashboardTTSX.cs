@@ -386,7 +386,7 @@ namespace WinformGoshi.Forms.Dashboard
 
             // data ACT+SuCo
             List<DMStatusinfo> lsstatus1 = frmDashboardTTSXServices.getDSStatusinfo(timebd, timekt, mmtb);
-            // lọc trang thái dừng và lỗi
+            // lọc trang thái dừng và lỗi đầu vào
             DMStatusinfo dmstatus = null;
             List<DMStatusinfo> lsstatus = new List<DMStatusinfo>();
 
