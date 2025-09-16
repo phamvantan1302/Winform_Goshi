@@ -322,7 +322,7 @@ namespace WinformGoshi.Sevices.dashboard
                 " and t0.created_at >= '" + fromdate + "' " +
                 " and t0.created_at <= '" + todate + "' " +
                 " and t0.machinecode = '" + mm + "' ";
-                sql += " order by t0.created_at";
+                sql += " order by t0.id";
                 using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
                 {
                     using (var reader = command.ExecuteReader())

@@ -93,7 +93,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 duration = (DateTime.Now - current.created_at).TotalSeconds;
                             }
 
-                            if (duration > 300)
+                            if (duration > 120)
                             {
                                 // Thêm trạng thái MAY_DUNG
                                 lschart1.Add(CloneStatus(current));
@@ -224,7 +224,7 @@ namespace WinformGoshi.Forms.Dashboard
                                     duration = (DateTime.Now - current.created_at).TotalSeconds;
                                 }
 
-                                if (duration > 300)
+                                if (duration > 120)
                                 {
                                     // Thêm trạng thái MAY_DUNG
                                     lschart2.Add(CloneStatus(current));

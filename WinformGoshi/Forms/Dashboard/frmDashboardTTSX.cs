@@ -421,7 +421,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 duration = (timekt - current.created_at).TotalSeconds;
                             }
 
-                            if (duration > 300)
+                            if (duration > 120)
                             {
                                 // Thêm trạng thái MAY_DUNG
                                 lsstatus.Add(CloneStatus(current));
@@ -542,27 +542,12 @@ namespace WinformGoshi.Forms.Dashboard
                                         {
                                             var nextMD = lsstatus1[j + 1];
                                             var durationd = (nextMD.created_at - lsstatus1[j].created_at).TotalSeconds;
-                                            if (durationd > 300)
+                                            if (durationd > 120)
                                             {
                                                 //lsstatus.Add(CloneStatus(lsstatus1[j]));
                                                 i = j-1;
                                                 break;
                                             }
-                                            //else
-                                            //{
-                                                //while (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status == "MAY_DUNG" || lsstatus1[j + 1].status == "KHONG_CO_TRANG_THAI"))
-                                                //{
-                                                //    j++;
-                                                //}
-                                                //if (j + 1 < lsstatus1.Count && (lsstatus1[j + 1].status != "MAY_DUNG" || lsstatus1[j + 1].status != "KHONG_CO_TRANG_THAI"))
-                                                //{
-                                                //    if (lsstatus1[j + 1].status == "MAY_LOI")
-                                                //    {
-                                                //        break;
-                                                //    }
-                                                //    lsstatus.Add(CloneStatus(lsstatus1[j + 1]));
-                                                //}
-                                            //}
                                         }
 
                                     }
