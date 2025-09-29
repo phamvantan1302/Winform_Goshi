@@ -401,80 +401,41 @@ namespace WinformGoshi.Forms.Dashboard
                         var current = lsstatus1[i];
                         var next = lsstatus1[i];
                         var nextMC = lsstatus1[i];
+                        
                         if (i != lsstatus1.Count - 1)
                         {
                             next = lsstatus1[i + 1];
                             nextMC = lsstatus1[i + 1];
                         }
 
-                        // Trường hợp MAY_DUNG kéo dài hơn 5 phút
+                        // Trường hợp MAY_DUNG kéo dài hơn 2 phút
                         if (current.status == "MAY_DUNG" || current.status == "KHONG_CO_TRANG_THAI")
                         {
                             var duration = (nextMC.created_at - current.created_at).TotalSeconds;
+                            bool checkendca = false;
 
                             if (duration == 0 && DateTime.Now < timekt)
                             {
                                 duration = (DateTime.Now - current.created_at).TotalSeconds;
+                                checkendca = true;
                             }
                             else if(duration == 0 && DateTime.Now >= timekt)
                             {
                                 duration = (timekt - current.created_at).TotalSeconds;
+                                checkendca = true;
                             }
 
-                            if (duration > 120)
+                            if (duration >= 120)
                             {
                                 // Thêm trạng thái MAY_DUNG
                                 lsstatus.Add(CloneStatus(current));
-
-                                // Nếu trạng thái tiếp theo là MAY_CHAY thì thêm nó để đánh dấu kết thúc
-                                if (next.status == "MAY_CHAY")
+                                if (!checkendca)
                                 {
-                                    lsstatus.Add(CloneStatus(next));
+                                    lsstatus.Add(CloneStatus(nextMC));
+                                    if(nextMC.status == "MAY_CHAY")
+                                        i++;
                                 }
-                                // Bỏ qua các trạng thái MAY_DUNG liên tiếp tiếp theo
-                                while (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status == "MAY_DUNG" || lsstatus1[i + 1].status == "KHONG_CO_TRANG_THAI"))
-                                {
-                                    i++;
-                                }
-                                // Thêm máy chạy **sau khi kết thúc dừng** nếu có
-                                if (i + 1 < lsstatus1.Count && (lsstatus1[i + 1].status != "MAY_DUNG" || lsstatus1[i + 1].status != "KHONG_CO_TRANG_THAI"))
-                                {
-                                    // KIểm tra nếu máy lỗi < 120 thì next đến máy chạy nếu > 120 thì thoát
-                                    if (lsstatus1[i + 1].status == "MAY_LOI")
-                                    {
-                                        current = lsstatus1[i + 1];
-                                        if (i != lsstatus1.Count - 1)
-                                        {
-                                            for (int j = i + 1; j < lsstatus1.Count; j++)
-                                            {
-                                                if (lsstatus1[j].status != "MAY_LOI")
-                                                {
-                                                    nextMC = lsstatus1[j];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        duration = (nextMC.created_at - current.created_at).TotalSeconds;
-
-                                        if (duration == 0 && DateTime.Now < timekt)
-                                        {
-                                            duration = (DateTime.Now - current.created_at).TotalSeconds;
-                                        }
-                                        if (duration < 120)
-                                        {
-                                            for (int j = i + 1; j < lsstatus1.Count; j++)
-                                            {
-                                                if (lsstatus1[j].status == "MAY_CHAY")
-                                                {
-                                                    lsstatus.Add(CloneStatus(lsstatus1[j]));
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                        lsstatus.Add(CloneStatus(lsstatus1[i + 1]));
-                                }
+                                
                                 if (lsstatus.Count > 1)
                                 {
                                     timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
@@ -484,6 +445,7 @@ namespace WinformGoshi.Forms.Dashboard
                         // Trường hợp MAY_LOI
                         else if (current.status == "MAY_LOI")
                         {
+                            bool checkendca = false;
                             int countttnext = 0;
                             if (i != lsstatus1.Count - 1)
                             {
@@ -510,49 +472,24 @@ namespace WinformGoshi.Forms.Dashboard
                             if (duration == 0 && DateTime.Now < timekt && countttnext == lsstatus1.Count-1)
                             {
                                 duration = (DateTime.Now - current.created_at).TotalSeconds;
+                                checkendca = true;
                             }
                             else if(duration == 0 && DateTime.Now >= timekt && countttnext == lsstatus1.Count-1)
                             {
                                 duration = (timekt - current.created_at).TotalSeconds;
+                                checkendca = true;
                             }
 
                             if (duration >= 120)
                             {
                                 lsstatus.Add(CloneStatus(current));
-
-                                // Chỉ thêm nếu trạng thái tiếp theo là MAY_CHAY (bỏ qua MAY_DUNG)
-                                //if (next.status == "MAY_CHAY")
-                                //{
-                                //    lsstatus.Add(CloneStatus(next));
-                                //}
-                                for (int j = countttnext; j < lsstatus1.Count; j++)
+                                if (!checkendca)
                                 {
-                                    if (lsstatus1[j].status == "MAY_CHAY")
-                                    {
-                                        lsstatus.Add(CloneStatus(lsstatus1[j]));
-                                        break;
-                                    }
-                                    else if (lsstatus1[j].status == "MAY_LOI")
-                                    {
-                                        break;
-                                    }
-                                    else if (lsstatus1[j].status == "MAY_DUNG" || lsstatus1[j].status == "KHONG_CO_TRANG_THAI")
-                                    {
-                                        if (j != lsstatus1.Count - 1)
-                                        {
-                                            var nextMD = lsstatus1[j + 1];
-                                            var durationd = (nextMD.created_at - lsstatus1[j].created_at).TotalSeconds;
-                                            if (durationd > 120)
-                                            {
-                                                //lsstatus.Add(CloneStatus(lsstatus1[j]));
-                                                i = j-1;
-                                                break;
-                                            }
-                                        }
-
-                                    }
-
+                                    lsstatus.Add(CloneStatus(nextMC));
+                                    if (nextMC.status == "MAY_CHAY")
+                                        i++;
                                 }
+
                                 if (lsstatus.Count > 1)
                                 {
                                     timedungByPhut += (lsstatus.LastOrDefault().created_at - lsstatus[lsstatus.Count - 2].created_at).TotalMinutes;
@@ -560,17 +497,7 @@ namespace WinformGoshi.Forms.Dashboard
                             }
                             else if(lsstatus.Count > 0)
                             {
-                                if (lsstatus.LastOrDefault().status != "MAY_CHAY")
-                                {
-                                    for (int j = i + 1; j < lsstatus1.Count; j++)
-                                    {
-                                        if (lsstatus1[j].status == "MAY_CHAY")
-                                        {
-                                            lsstatus.Add(CloneStatus(lsstatus1[j]));
-                                            break;
-                                        }
-                                    }
-                                }
+                                
                             }
                         }
                     }
@@ -601,19 +528,19 @@ namespace WinformGoshi.Forms.Dashboard
                 dMShowChart.end = lscounter.FirstOrDefault().created_at.ToString("HH:mm");
                 dschart.Add(dMShowChart);
 
-                dMShowChart = new DMShowChart()
-                {
-                    status = "",
-                    start = lscounter.FirstOrDefault().created_at.ToString("HH:mm"),
-                    slstart = 0,
-                    slend = 0
-                };
-                sumtimeact = 0;
-                dMShowChart.end = lsstatus.FirstOrDefault().created_at.ToString("HH:mm");
-                dMShowChart.slend = lscounter.Where(x => x.created_at <= lsstatus.FirstOrDefault().created_at)
-                                                        .OrderByDescending(x => x.created_at)
-                                                        .FirstOrDefault()?.quantity ?? 0;
-                dschart.Add(dMShowChart);
+                //dMShowChart = new DMShowChart()
+                //{
+                //    status = "",
+                //    start = lscounter.FirstOrDefault().created_at.ToString("HH:mm"),
+                //    slstart = 0,
+                //    slend = 0
+                //};
+                //sumtimeact = 0;
+                //dMShowChart.end = lsstatus.FirstOrDefault().created_at.ToString("HH:mm");
+                //dMShowChart.slend = lscounter.Where(x => x.created_at <= lsstatus.FirstOrDefault().created_at)
+                //                                        .OrderByDescending(x => x.created_at)
+                //                                        .FirstOrDefault()?.quantity ?? 0;
+                //dschart.Add(dMShowChart);
 
                 for (int i = 0; i < lsstatus.Count; i++)
                 {
@@ -624,6 +551,7 @@ namespace WinformGoshi.Forms.Dashboard
                             dMShowChart = new DMShowChart()
                             {
                                 status = lsstatus[i].status,
+                                note = lsstatus[i].note,
                                 start = lsstatus[i].created_at.ToString("HH:mm"),
                             };
                             if (i + 1 == lsstatus.Count)
@@ -632,7 +560,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 {
                                     dMShowChart.end = DateTime.Now.ToString("HH:mm");
                                     dMShowChart.slend = lscounter
-                                                        .Where(x => x.created_at <= lsstatus[i].created_at)
+                                                        .Where(x => x.created_at <= DateTime.Now)
                                                         .OrderByDescending(x => x.created_at)
                                                         .FirstOrDefault()?.quantity ?? 0;
                                 }
@@ -640,7 +568,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 {
                                     dMShowChart.end = timekt.ToString("HH:mm");
                                     dMShowChart.slend = lscounter
-                                                        .Where(x => x.created_at <= lsstatus[i].created_at)
+                                                        .Where(x => x.created_at <= timekt)
                                                         .OrderByDescending(x => x.created_at)
                                                         .FirstOrDefault()?.quantity ?? 0;
                                 }
@@ -659,59 +587,65 @@ namespace WinformGoshi.Forms.Dashboard
                                                     .OrderByDescending(x => x.created_at)
                                                     .FirstOrDefault()?.quantity ?? 0;
                             dschart.Add(dMShowChart);
+                            i++;
                         }
-                        
+
+                        // MAY CHAY
+                        if (i < lsstatus.Count)
+                        {
+                            dMShowChart = new DMShowChart()
+                            {
+                                status = "MAY_CHAY",
+                                start = lsstatus[i].created_at.ToString("HH:mm"),
+                                slstart = lscounter
+                                                    .Where(x => x.created_at <= lsstatus[i].created_at)
+                                                    .OrderByDescending(x => x.created_at)
+                                                   .FirstOrDefault()?.quantity ?? 0
+                            };
+
+
+                            if (i + 1 == lsstatus.Count)
+                            {
+                                if (DateTime.Now < timekt)
+                                {
+                                    dMShowChart.end = DateTime.Now.ToString("HH:mm");
+                                    dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= DateTime.Now)
+                                                        .OrderByDescending(x => x.created_at)
+                                                        .FirstOrDefault()?.quantity ?? 0;
+                                }
+                                else
+                                {
+                                    dMShowChart.end = timekt.ToString("HH:mm");
+                                    dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= timekt)
+                                                        .OrderByDescending(x => x.created_at)
+                                                        .FirstOrDefault()?.quantity ?? 0;
+                                }
+
+                            }
+                            else if (i < lsstatus.Count - 1)
+                            {
+                                dMShowChart.end = lsstatus[i + 1].created_at.ToString("HH:mm");
+                                dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= lsstatus[i + 1].created_at)
+                                                        .OrderByDescending(x => x.created_at)
+                                                        .FirstOrDefault()?.quantity ?? 0;
+                            }
+
+                            dschart.Add(dMShowChart);
+                        }
                     }
                     else if (lsstatus[i].status == "MAY_CHAY")
                     {
-                        dMShowChart = new DMShowChart()
-                        {
-                            status = lsstatus[i].status,
-                            start = lsstatus[i].created_at.ToString("HH:mm"),
-                        };
-                        if (i + 1 == lsstatus.Count)
-                        {
-                            if (timekt < DateTime.Now)
-                            {
-                                dMShowChart.end = timekt.ToString("HH:mm");
-                                dMShowChart.slend = lscounter
-                                                    .Where(x => x.created_at <= timekt && x.quantity > 0)
-                                                    .OrderByDescending(x => x.created_at)
-                                                    .FirstOrDefault()?.quantity ?? 0;
-                                sumtimeact = (timekt - lsstatus[i].created_at).TotalSeconds + sumtimeact;
-                            }
-                            else
-                            {
-                                dMShowChart.end = DateTime.Now.ToString("HH:mm");
-                                dMShowChart.slend = lscounter
-                                                    .Where(x => x.created_at <= DateTime.Now && x.quantity > 0)
-                                                    .OrderByDescending(x => x.created_at)
-                                                    .FirstOrDefault()?.quantity ?? 0;
-                                sumtimeact = (DateTime.Now - lsstatus[i].created_at).TotalSeconds + sumtimeact;
-                            }
-
-                            
-                        }
-                        else
-                        {
-                            dMShowChart.end = lsstatus[i + 1].created_at.ToString("HH:mm");
-                            dMShowChart.slend = lscounter
-                                                .Where(x => x.created_at <= lsstatus[i+1].created_at && x.quantity > 0)
-                                                .OrderByDescending(x => x.created_at)
-                                                .FirstOrDefault()?.quantity ?? 0;
-                            sumtimeact = (lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalSeconds + sumtimeact;
-                        }
-                        dMShowChart.slstart = lscounter
-                                                .Where(x => x.created_at <= lsstatus[i].created_at)
-                                                .OrderByDescending(x => x.created_at)
-                                                .FirstOrDefault()?.quantity ?? 0;
-                        dschart.Add(dMShowChart);
+                        
                     }
                     else if (lsstatus[i].status == "MAY_LOI")
                     {
                         dMShowChart = new DMShowChart()
                         {
                             status = lsstatus[i].status,
+                            note = lsstatus[i].note,
                             start = lsstatus[i].created_at.ToString("HH:mm"),
                         };
 
@@ -734,50 +668,54 @@ namespace WinformGoshi.Forms.Dashboard
 
                         dschartError.Add(dMShowChart);
                         dschart.Add(dMShowChart);
+                        i++;
 
-                        //Tìm trạng thái MAY_CHAY gần nhất tiếp theo (nếu có)
-                        for (int j = i + 1; j < lsstatus.Count; j++)
+                        //May chay
+                        if (i < lsstatus.Count)
                         {
-                            if (lsstatus[j].status == "MAY_DUNG" || lsstatus[j].status == "MAY_LOI")
-                                break;
-                            if (lsstatus[j].status == "MAY_CHAY" && j+1 != lsstatus.Count)
+                            dMShowChart = new DMShowChart()
                             {
-                                var dmMayChay = new DMShowChart()
-                                {
-                                    status = lsstatus[j].status,
-                                    start = lsstatus[j].created_at.ToString("HH:mm"),
-                                    slstart = lscounter
-                                                .Where(x => x.created_at <= lsstatus[j].created_at)
-                                                .OrderByDescending(x => x.created_at)
-                                                .FirstOrDefault()?.quantity ?? 0
-                                };
+                                status = "MAY_CHAY",
+                                start = lsstatus[i].created_at.ToString("HH:mm"),
+                                slstart = lscounter
+                                                    .Where(x => x.created_at <= lsstatus[i].created_at)
+                                                    .OrderByDescending(x => x.created_at)
+                                                   .FirstOrDefault()?.quantity ?? 0
+                            };
 
-                                if (j + 1 == lsstatus.Count)
+
+                            if (i + 1 == lsstatus.Count)
+                            {
+                                if (DateTime.Now < timekt)
                                 {
-                                    if (timekt < DateTime.Now)
-                                        dmMayChay.end = timekt.ToString("HH:mm");
-                                    else
-                                        dmMayChay.end = DateTime.Now.ToString("HH:mm");
-                                    dmMayChay.slend = lscounter
-                                                        .Where(x => x.created_at <= DateTime.Now && x.quantity > 0)
+                                    dMShowChart.end = DateTime.Now.ToString("HH:mm");
+                                    dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= DateTime.Now)
                                                         .OrderByDescending(x => x.created_at)
-                                                        .FirstOrDefault()?.quantity ?? 0; ;
+                                                        .FirstOrDefault()?.quantity ?? 0;
                                 }
                                 else
                                 {
-                                    dmMayChay.end = lsstatus[j + 1].created_at.ToString("HH:mm");
-                                    dmMayChay.slend = lscounter
-                                                        .Where(x => x.created_at <= lsstatus[j+1].created_at && x.quantity > 0)
+                                    dMShowChart.end = timekt.ToString("HH:mm");
+                                    dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= timekt)
                                                         .OrderByDescending(x => x.created_at)
                                                         .FirstOrDefault()?.quantity ?? 0;
                                 }
 
-                                dschart.Add(dmMayChay);
-
-                                i = j - 1;
-                                break;
                             }
+                            else if (i < lsstatus.Count - 1)
+                            {
+                                dMShowChart.end = lsstatus[i + 1].created_at.ToString("HH:mm");
+                                dMShowChart.slend = lscounter
+                                                        .Where(x => x.created_at <= lsstatus[i + 1].created_at)
+                                                        .OrderByDescending(x => x.created_at)
+                                                        .FirstOrDefault()?.quantity ?? 0;
+                            }
+
+                            dschart.Add(dMShowChart);
                         }
+                            
                     }
                 }
             }
@@ -796,24 +734,43 @@ namespace WinformGoshi.Forms.Dashboard
             MAYDUNGSeries.Points.Clear();
 
             chart1.ChartAreas[0].AxisX.CustomLabels.Clear();
+            chart1.Annotations.Clear();
             List<DateTime> timePointsACT = new List<DateTime>();
+            chart1.ChartAreas[0].AxisX.Minimum = timebd.ToOADate();
+            chart1.ChartAreas[0].AxisX.Maximum = timekt.ToOADate();
             if (lsstatus.Count > 0)
             {
+                
                 foreach (var item in dschart)
                 {
                     /*if (item.start == item.end) continue;*/ // Bỏ khoảng không hợp lệ
 
+                    string timeendcv = timekt.ToString("HH:mm");
+                    if (item.end == null)
+                        timeendcv = timekt.ToString("HH:mm");
+                    else
+                        timeendcv = item.end;
                     TimeSpan tsStart = TimeSpan.Parse(item.start);
-                    TimeSpan tsEnd = TimeSpan.Parse(item.end);
+                    TimeSpan tsEnd = TimeSpan.Parse(timeendcv);
                     var tscheck = TimeSpan.Parse(timekt.ToString("HH:mm:ss"));
 
-                    // Nếu end <= start thì end là ngày hôm sau
-                    DateTime startTime = DateTime.ParseExact($"{datenow:yyyy-MM-dd} {item.start}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-                    DateTime endTime = DateTime.ParseExact($"{datenow:yyyy-MM-dd} {item.end}", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                    // Nếu end <= start thì end là ngày
+                    DateTime startTime = DateTime.ParseExact(item.start, "HH:mm", CultureInfo.InvariantCulture);
+                    DateTime endTime = string.IsNullOrEmpty(item.end) ? timekt : DateTime.ParseExact(item.end, "HH:mm", CultureInfo.InvariantCulture);
+
+                    // Nếu end <= start -> startTime là ngày trước
+                    if (endTime <= startTime)
+                    {
+                        startTime = startTime.AddDays(-1); // lùi 1 ngày
+                    }
+
+                    // Gán ngày dựa trên searchDate
+                    startTime = dtpSearch.Value.Date.AddHours(startTime.Hour).AddMinutes(startTime.Minute);
+                    endTime = dtpSearch.Value.Date.AddHours(endTime.Hour).AddMinutes(endTime.Minute);
 
                     if (TimeSpan.Parse(startTime.ToString("HH:mm:ss")) > tscheck)
                     {
-                        startTime = startTime.AddDays(-1); // Nếu end < start thì thực sự là qua ngày hôm sau
+                        startTime = startTime.AddDays(-1); // Nếu end < start thì thực sự là qua ngày 
                     }
                     if (TimeSpan.Parse(endTime.ToString("HH:mm:ss")) > tscheck)
                     {
@@ -827,20 +784,72 @@ namespace WinformGoshi.Forms.Dashboard
                     
                     if (item.status == "MAY_LOI")
                     {
-                        SuCoSeries.Points.AddXY(startTime, item.slstart);
+                        // Thêm điểm bắt đầu
+                        var startPoint = new DataPoint(startTime.ToOADate(), item.slstart);
+                        SuCoSeries.Points.Add(startPoint);
+
+                        // Thêm điểm kết thúc
                         SuCoSeries.Points.AddXY(endTime, item.slend);
 
+                        if (!string.IsNullOrEmpty(item.note) && startTime.ToOADate() >= chart1.ChartAreas[0].AxisX.Minimum
+                            && startTime.ToOADate() <= chart1.ChartAreas[0].AxisX.Maximum)
+                        {
+                            var offset = Math.Min(10, -startPoint.YValues[0] * 0.05);
+                            var callout = new CalloutAnnotation
+                            {
+                                Text = item.note,
+                                AnchorDataPoint = startPoint,
+                                AxisX = chart1.ChartAreas[0].AxisX,
+                                AxisY = chart1.ChartAreas[0].AxisY,
+                                ForeColor = Color.Black,
+                                BackColor = Color.White,
+                                LineColor = Color.Black,
+                                Width = 10,
+                                Height = 10,
+                                AnchorOffsetY = offset
+                            };
+
+                            // Thêm vào chart
+                            chart1.Annotations.Add(callout);
+
+                        }
+                        //SuCoSeries.Points.Add(startPoint);
+
+                        // Điểm kết thúc rỗng để ngắt vẽ
                         var dungEnd = new DataPoint(endTime.ToOADate(), item.slend)
                         {
-                            IsEmpty = true // Đảm bảo không vẽ thêm đoạn dư
+                            IsEmpty = true
                         };
                         SuCoSeries.Points.Add(dungEnd);
                     }
 
                     if (item.status == "MAY_DUNG" || item.status == "KHONG_CO_TRANG_THAI")
                     {
-                        MAYDUNGSeries.Points.AddXY(startTime, item.slstart);
+                        var startPoint = new DataPoint(startTime.ToOADate(), item.slstart);
+                        MAYDUNGSeries.Points.Add(startPoint);
                         MAYDUNGSeries.Points.AddXY(endTime, item.slend);
+
+                        if (!string.IsNullOrEmpty(item.note))
+                        {
+                            var offset = Math.Min(10, -startPoint.YValues[0] * 0.05);
+                            var callout = new CalloutAnnotation
+                            {
+                                Text = item.note,
+                                AnchorDataPoint = startPoint,
+                                AxisX = chart1.ChartAreas[0].AxisX,
+                                AxisY = chart1.ChartAreas[0].AxisY,
+                                ForeColor = Color.Black,
+                                BackColor = Color.White,
+                                LineColor = Color.Black,
+                                Width = 10,
+                                Height = 10,
+                                AnchorOffsetY = offset
+                            };
+
+                            // Thêm vào chart
+                            chart1.Annotations.Add(callout);
+
+                        }
 
                         var dungEnd = new DataPoint(endTime.ToOADate(), item.slend)
                         {
@@ -857,6 +866,7 @@ namespace WinformGoshi.Forms.Dashboard
 
                     // Tạo custom label hiển thị trên trục X
                     var axisX2 = chart1.ChartAreas[0].AxisX;
+                    
                     var label = new CustomLabel
                     {
                         FromPosition = endTime.ToOADate() - 0.04,
@@ -1020,7 +1030,7 @@ namespace WinformGoshi.Forms.Dashboard
             {
                 for(int i = 0; i < lsstatus.Count; i++)
                 {
-                    if (lsstatus[i].status == "MAY_DUNG" || lsstatus[i].status == "MAY_LOI")
+                    if (lsstatus[i].status == "MAY_DUNG" || lsstatus[i].status == "MAY_LOI" || lsstatus[i].status == "KHONG_CO_TRANG_THAI")
                     {
                         dgvDungThucTe.Rows.Add(1);
                         if (lsstatus[i].stoppagereason_id == -1)
@@ -1046,7 +1056,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 dgvDungThucTe.Rows[indexRow].Cells[2].Value = lsstatus[i + 1].created_at.ToString("HH:mm");
                                 dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
                             }
-
+                            i++;
                             //dgvDungThucTe.Rows[indexRow].Cells[4].Value = "Method";
                         }
                         else
@@ -1071,6 +1081,7 @@ namespace WinformGoshi.Forms.Dashboard
                                 dgvDungThucTe.Rows[indexRow].Cells[2].Value = lsstatus[i + 1].created_at.ToString("HH:mm");
                                 dgvDungThucTe.Rows[indexRow].Cells[3].Value = Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1).ToString() + "'";
                             }
+                            i++;
                             //dgvDungThucTe.Rows[i].Cells[4].Value = "Machine";
                         }
                         indexRow++;
@@ -1127,7 +1138,7 @@ namespace WinformGoshi.Forms.Dashboard
                                     dgvKeHoachAndThucTe.Rows[indexRow].Cells[3].Value = Math.Round(((lsstatus[j + 1].created_at - lsstatus[j].created_at).TotalMinutes - (getTimeCa[i].todate - getTimeCa[i].fromdate).TotalMinutes), 1).ToString();
                                 }
                                 
-                            }
+                            }j++;
                         }
 
                     }
@@ -1159,6 +1170,7 @@ namespace WinformGoshi.Forms.Dashboard
                             sumtgloi += Math.Round((lsstatus[i + 1].created_at - lsstatus[i].created_at).TotalMinutes, 1);
                         }
                     }
+                    i++;
                 }
                 dgvKeHoachAndThucTe.Rows.Add(1);
                 dgvKeHoachAndThucTe.Rows[indexRow].Cells[0].Value = "Dừng đột xuất";
@@ -1238,7 +1250,8 @@ namespace WinformGoshi.Forms.Dashboard
                 stop_name = source.stop_name,
                 shifttimetableexception_name = source.shifttimetableexception_name,
                 fromdate = source.fromdate,
-                todate = source.todate
+                todate = source.todate,
+                note = source.note
             };
         }
 

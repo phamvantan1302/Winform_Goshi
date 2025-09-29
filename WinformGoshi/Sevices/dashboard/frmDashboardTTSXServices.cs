@@ -314,7 +314,7 @@ namespace WinformGoshi.Sevices.dashboard
             {
                 sql = "select t0.id, t0.machinecode, t0.status, t0.created_at, t0.error_code, " +
                 " t0.stoppagereason_id, t0.shifttimetableexception_id, t1.name, t2.name, " +
-                " t2.fromdate, t2.todate " +
+                " t2.fromdate, t2.todate, t0.note " +
                 " from productioncounting_iotstatusinfo t0" +
                 " left join stoppage_stoppagereason t1 on t0.stoppagereason_id = t1.id " +
                 " left join basic_shifttimetableexception t2 on t0.shifttimetableexception_id = t2.id" +
@@ -322,7 +322,7 @@ namespace WinformGoshi.Sevices.dashboard
                 " and t0.created_at >= '" + fromdate + "' " +
                 " and t0.created_at <= '" + todate + "' " +
                 " and t0.machinecode = '" + mm + "' ";
-                sql += " order by t0.id";
+                sql += " order by t0.created_at";
                 using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
                 {
                     using (var reader = command.ExecuteReader())
@@ -342,6 +342,7 @@ namespace WinformGoshi.Sevices.dashboard
                                 shifttimetableexception_name = reader.IsDBNull(8) ? "" : reader.GetString(8),
                                 fromdate = reader.IsDBNull(9) ? DateTime.Now : reader.GetDateTime(9),
                                 todate = reader.IsDBNull(10) ? DateTime.Now : reader.GetDateTime(10),
+                                note = reader.IsDBNull(11) ? "" : reader.GetString(11),
                             };
                             ret.Add(item);
                         }

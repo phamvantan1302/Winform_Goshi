@@ -32,6 +32,7 @@ namespace WinformGoshi.Models.dashboard
             public string status { get; set; }
             public string start { get; set; }
             public string end { get; set; }
+            public string note { get; set; }
             public double slstart { get; set; } = 0;
             public double slend { get; set; } = 0;
             public double slsx {  get; set; }
@@ -76,6 +77,7 @@ namespace WinformGoshi.Models.dashboard
             public string shifttimetableexception_name { get; set; }
             public DateTime fromdate { get; set; }
             public DateTime todate { get; set; }
+            public string note {  get; set; }
         }
     }
 }
