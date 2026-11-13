@@ -11,3 +11,8 @@
 
 # Thư mục thư viện NuGet (sẽ tự tải lại khi build)
 packages/
+
+# Bỏ qua các file log nâng cấp của Visual Studio
+UpgradeLog*.htm
+UpgradeLog*.XML
+_UpgradeReport_Files/
