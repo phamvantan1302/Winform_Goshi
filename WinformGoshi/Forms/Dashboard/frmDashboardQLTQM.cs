@@ -58,7 +58,7 @@ namespace WinformGoshi.Forms.Dashboard
             planSeries.BorderWidth = 1;
 
             //Data
-            string valueThu = "", bdau = "", kthuc = "";
+            string bdau = "", kthuc = "";
             double sumtimeact = 0, slTTtrongngay = 0;
             DateTime timebd = dtpSearch.Value, timekt = dtpSearch.Value, date = dtpSearch.Value;
             List<DMTimeByCa> getTimeCa = frmDashboardQLTQMServices.getDataCaKH(date);

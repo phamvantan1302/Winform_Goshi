@@ -34,9 +34,7 @@ namespace WinformGoshi.Forms.Dashboard
         {
             if (isFormClosing || chart1 == null || this.IsDisposed)
                 return;
-            //dtpDate.Value = new DateTime(2025, 09, 08);
             double sumdung = 0;
-            string mmtb = "";
             DateTime toDate = dtpDate.Value, fromDate = dtpDate.Value;
             Series pieSeries1 = chart1.Series["Series1"];
             pieSeries1.Points.Clear();
@@ -160,7 +158,7 @@ namespace WinformGoshi.Forms.Dashboard
 
         private void loaddashboard2(object sender, EventArgs e)
         {
-            double tongerror = 0, sumdung = 0;
+            double sumdung = 0;
             DateTime toDate = DateTime.Now, fromDate = DateTime.Now;
             Series pieSeriesDung = chart2.Series["Series1"];
             pieSeriesDung.Points.Clear();

@@ -134,7 +134,7 @@ namespace WinformGoshi.Forms.Dashboard
             string valueThu = "", bdau = "", kthuc = "", line = "0", mode = "0", mmtb = "";
             int idca = 0;
             DateTime timebd = DateTime.Now, timekt = DateTime.Now;
-            double sumtime = 0, sumtimeact = 0, timestart = 0, timeend = 0, slsxkh = 0, timedung = 0, timeCT = 0, timedungByPhut = 0;
+            double sumtime = 0, sumtimeact = 0, timedung = 0, timeCT = 0, timedungByPhut = 0;
 
             if (cbbChuyen.SelectedValue != null)
                 line = cbbChuyen.SelectedValue.ToString();
@@ -149,7 +149,6 @@ namespace WinformGoshi.Forms.Dashboard
             List<DMShowChart> dschart = new List<DMShowChart>();
             List<DMShowChart> dschartError = new List<DMShowChart>();
             DMShowChart dMShowChart = null;
-            DMShowChart dMShowChartError = null;
             chart1.ChartAreas[0].AxisX.StripLines.Clear();
 
             if (getTimeCa.Count > 0)
@@ -336,7 +335,6 @@ namespace WinformGoshi.Forms.Dashboard
             DateTime? prevTime = null;
             DateTime curDay = today;
             List<DateTime> timePoints = new List<DateTime>();
-            bool checkdate = false;
 
             foreach (var item in dschart.Where(x => x.start != x.end))
             {
@@ -405,8 +403,8 @@ namespace WinformGoshi.Forms.Dashboard
 
             // data ACT+SuCo
             List<DMStatusinfo> lsstatus1 = frmDashboardTTSXServices.getDSStatusinfo(timebd, timekt, mmtb);
+
             // lọc trang thái dừng và lỗi đầu vào
-            DMStatusinfo dmstatus = null;
             List<DMStatusinfo> lsstatus = new List<DMStatusinfo>();
 
             //filter TT
@@ -470,19 +468,11 @@ namespace WinformGoshi.Forms.Dashboard
                                 for (int j = i + 1; j < lsstatus1.Count; j++)
                                 {
                                     countttnext = j;
-                                    //if (lsstatus1[j].status != "MAY_LOI")
-                                    //{
-                                        nextMC = lsstatus1[j];
-                                        break;
-                                    //}
-                                    //else
-                                    //{
-                                    //    nextMC = lsstatus1[j];
-                                    //    //current = lsstatus1[j];
-                                    //    break;
-                                    //}
+                                    nextMC = lsstatus1[j];
+                                    break;
                                 }
-                            }else
+                            }
+                            else
                                 countttnext = i;
 
                             var duration = (nextMC.created_at - current.created_at).TotalSeconds;
@@ -521,7 +511,7 @@ namespace WinformGoshi.Forms.Dashboard
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -1045,7 +1035,7 @@ namespace WinformGoshi.Forms.Dashboard
                 else
                     lbTotalDIF.ForeColor = Color.Red;
             }
-            catch(Exception ex) { }
+            catch(Exception) { }
             
             // show table 1
             dgvDungThucTe.Rows.Clear();
@@ -1261,7 +1251,7 @@ namespace WinformGoshi.Forms.Dashboard
                     lbTyLeHT.Text = "";
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
         }
 
@@ -1328,7 +1318,7 @@ namespace WinformGoshi.Forms.Dashboard
 
         private double gettime(List<DMTimeByCa> getTimeCa, DateTime timebd, DateTime timekt)
         {
-            double counttime = 0, sllbact = 0, sllbPlan = 0;
+            double counttime = 0;
             DateTime timenow = DateTime.Now;
             timenow = new DateTime(
                         DateTime.Now.Year,

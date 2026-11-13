@@ -49,7 +49,7 @@ namespace WinformGoshi.Sevices.dashboard
                     }
                 }
             } 
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
