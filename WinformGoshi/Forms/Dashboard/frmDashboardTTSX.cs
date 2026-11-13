@@ -160,19 +160,22 @@ namespace WinformGoshi.Forms.Dashboard
                     timedung = (it.todate - it.fromdate).TotalSeconds + timedung;
                 }
 
-                DateTime dt = getTimeCa.FirstOrDefault().fromdate;
+                // Lấy phần tử cuối cùng để xác định Thứ của ngày kết thúc ca
+                var lastItem = getTimeCa.LastOrDefault();
+                DateTime dt = lastItem.fromdate;
                 string thu = dt.DayOfWeek.ToString().ToLower() + "hours";
-
-                var item = getTimeCa.FirstOrDefault();
 
                 PropertyInfo prop = typeof(DMTimeByCa).GetProperty(thu, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
                 if (prop != null)
                 {
-                    valueThu = prop.GetValue(item)?.ToString();
+                    valueThu = prop.GetValue(lastItem)?.ToString();
                 }
 
-                if (valueThu != "")
+                // Giữ item là FirstOrDefault() để dùng cho đoạn tạo "startup" bên dưới không bị sai giờ
+                var item = getTimeCa.FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(valueThu))
                 {
                     bdau = valueThu.Split('-')[0];
                     kthuc = valueThu.Split('-')[1];
@@ -226,19 +229,31 @@ namespace WinformGoshi.Forms.Dashboard
                     }
 
                     double sumtimeca = (timekt - timebd).TotalSeconds;
-                    timeCT = (sumtimeca - timedung) / slkh;
+                    if (sumtimeca <= 0 || slkh <= 0)
+                    {
+                        return;
+                    }
+
+                    double timeSanXuat = sumtimeca - timedung;
+
+                    if (timeSanXuat <= 0)
+                    {
+                        return;
+                    }
+
+                    timeCT = timeSanXuat / slkh;
 
                     // Bdau ca
-                    dMShowChart = new DMShowChart()
-                    {
-                        model = "",
-                        status = "startup",
-                        start = timebd.ToString("HH:mm"),
-                        end = item.fromdate.ToString("HH:mm"),
-                        slstart = 0,
-                        slend = 0
-                    };
-                    dschart.Add(dMShowChart);
+                    //dMShowChart = new DMShowChart()
+                    //{
+                    //    model = "",
+                    //    status = "startup",
+                    //    start = timebd.ToString("HH:mm"),
+                    //    end = item.fromdate.ToString("HH:mm"),
+                    //    slstart = 0,
+                    //    slend = 0
+                    //};
+                    //dschart.Add(dMShowChart);
                     // Tam dung
                     for(int i = 0; i< getTimeCa.Count; i++)
                     {
@@ -257,7 +272,19 @@ namespace WinformGoshi.Forms.Dashboard
                         dschart.Add(dMShowChart);
 
                         //máy chay sau khi dung
-                        if(dMShowChart.end != kthuc)
+                        // Thay vì chỉ check dMShowChart.end != kthuc, hãy tính thời gian chạy thực tế
+                        double runDuration = 0;
+                        if (i + 1 < getTimeCa.Count)
+                        {
+                            runDuration = (getTimeCa[i + 1].fromdate - getTimeCa[i].todate).TotalSeconds;
+                        }
+                        else
+                        {
+                            runDuration = (timekt - getTimeCa[i].todate).TotalSeconds;
+                        }
+
+                        // Chỉ tạo block "Máy chạy" nếu khoảng thời gian > 0
+                        if (runDuration > 0)
                         {
                             dMShowChart = new DMShowChart()
                             {
@@ -269,17 +296,17 @@ namespace WinformGoshi.Forms.Dashboard
 
                             if (i + 1 < getTimeCa.Count)
                             {
-                                sumtime = (getTimeCa[i + 1].fromdate - getTimeCa[i].todate).TotalSeconds + sumtime;
+                                sumtime = runDuration + sumtime;
                                 dMShowChart.end = getTimeCa[i + 1].fromdate.ToString("HH:mm");
                                 dMShowChart.slend = Math.Round(sumtime / timeCT, 0);
                             }
                             else
                             {
-                                sumtime = (timekt - getTimeCa[i].todate).TotalSeconds + sumtime;
+                                sumtime = runDuration + sumtime;
                                 dMShowChart.end = timekt.ToString("HH:mm");
                                 dMShowChart.slend = slkh;
                             }
-                                
+
                             dschart.Add(dMShowChart);
                         }
 
@@ -345,43 +372,34 @@ namespace WinformGoshi.Forms.Dashboard
 
             timePoints = timePoints.Distinct().OrderBy(t => t).ToList();
 
-
             foreach (var item in dschart)
             {
-                if (item.start == item.end) continue; // Bỏ khoảng không hợp lệ
+                if (item.start == item.end)
+                    continue;
 
                 var tsStart = TimeSpan.Parse(item.start);
                 var tsEnd = TimeSpan.Parse(item.end);
-                var tscheck = TimeSpan.Parse("18:01:00");
 
-                DateTime start = curDay.Date.Add(tsStart);
-                DateTime end = curDay.Date.Add(tsEnd);
+                TimeSpan shiftStart = TimeSpan.Parse(dschart.FirstOrDefault().start);
+                TimeSpan shiftEnd = TimeSpan.Parse(dschart.LastOrDefault().end);
 
-                // Nếu end < start → tức là qua ngày
-                if (tsEnd >= tscheck)
+                DateTime start = GetChartDate(
+                    curDay, tsStart, shiftStart, shiftEnd);
+
+                DateTime end = GetChartDate(
+                    curDay, tsEnd, shiftStart, shiftEnd);
+
+                // Đảm bảo thời gian kết thúc không nhỏ hơn bắt đầu
+                if (end < start)
                 {
-                    end = curDay.AddDays(-1).Date.Add(tsEnd);
-                }
-                else
-                {
-                    end = curDay.Date.Add(tsEnd);
-                }
-                if (tsStart >= tscheck)
-                {
-                    start = curDay.AddDays(-1).Date.Add(tsStart);
-                }
-                else
-                {
-                    start = curDay.Date.Add(tsStart);
+                    end = end.AddDays(1);
                 }
 
                 planSeries.Points.AddXY(start.ToOADate(), item.slstart);
-                planSeries.Points.AddXY(end.ToOADate(), item.slend);
 
                 var dpEnd = new DataPoint(end.ToOADate(), item.slend);
-
-                // Gán label chỉ cho điểm kết thúc
                 dpEnd.Label = item.slend.ToString();
+
                 planSeries.Points.Add(dpEnd);
             }
 
@@ -740,98 +758,64 @@ namespace WinformGoshi.Forms.Dashboard
             chart1.ChartAreas[0].AxisX.Maximum = timekt.ToOADate();
             if (lsstatus.Count > 0)
             {
-                
+                TimeSpan shiftStart = TimeSpan.Parse(dschart.FirstOrDefault().start);
+                TimeSpan shiftEnd = TimeSpan.Parse(dschart.LastOrDefault().end);
                 foreach (var item in dschart)
                 {
-                    /*if (item.start == item.end) continue;*/ // Bỏ khoảng không hợp lệ
-
-                    string timeendcv = timekt.ToString("HH:mm");
-                    if (item.end == null)
-                        timeendcv = timekt.ToString("HH:mm");
-                    else
-                        timeendcv = item.end;
+                    // Giờ bắt đầu
                     TimeSpan tsStart = TimeSpan.Parse(item.start);
-                    TimeSpan tsEnd = TimeSpan.Parse(timeendcv);
-                    var tscheck = TimeSpan.Parse(timekt.ToString("HH:mm:ss"));
 
-                    // Nếu end <= start thì end là ngày
-                    DateTime startTime = DateTime.ParseExact(item.start, "HH:mm", CultureInfo.InvariantCulture);
-                    DateTime endTime = string.IsNullOrEmpty(item.end) ? timekt : DateTime.ParseExact(item.end, "HH:mm", CultureInfo.InvariantCulture);
+                    // Giờ kết thúc, nếu null thì lấy giờ hiện tại
+                    TimeSpan tsEnd = string.IsNullOrEmpty(item.end)
+                        ? timekt.TimeOfDay
+                        : TimeSpan.Parse(item.end);
 
-                    // Nếu end <= start -> startTime là ngày trước
-                    if (endTime <= startTime)
+                    // Xác định ngày giờ thực tế
+                    DateTime startTime = GetActualChartDate(
+                        dtpSearch.Value.Date,
+                        tsStart,
+                        shiftStart,
+                        shiftEnd
+                    );
+
+                    DateTime endTime = GetActualChartDate(
+                        dtpSearch.Value.Date,
+                        tsEnd,
+                        shiftStart,
+                        shiftEnd
+                    );
+
+                    if (endTime < startTime)
                     {
-                        startTime = startTime.AddDays(-1); // lùi 1 ngày
+                        endTime = endTime.AddDays(1);
                     }
 
-                    // Gán ngày dựa trên searchDate
-                    startTime = dtpSearch.Value.Date.AddHours(startTime.Hour).AddMinutes(startTime.Minute);
-                    endTime = dtpSearch.Value.Date.AddHours(endTime.Hour).AddMinutes(endTime.Minute);
+                    ACTSeries.Points.AddXY(startTime.ToOADate(), item.slstart);
 
-                    if (TimeSpan.Parse(startTime.ToString("HH:mm:ss")) > tscheck)
-                    {
-                        startTime = startTime.AddDays(-1); // Nếu end < start thì thực sự là qua ngày 
-                    }
-                    if (TimeSpan.Parse(endTime.ToString("HH:mm:ss")) > tscheck)
-                    {
-                        endTime = endTime.AddDays(-1);
-                    }
+                    var dpEnd = new DataPoint(endTime.ToOADate(), item.slend);
+                    ACTSeries.Points.Add(dpEnd);
 
-                    // Thêm 2 điểm cho line chart (line chỉ từ start đến end)
-                    ACTSeries.Points.AddXY(startTime, item.slstart);
-                    ACTSeries.Points.AddXY(endTime, item.slend);
-
-                    
                     if (item.status == "MAY_LOI")
                     {
-                        // Thêm điểm bắt đầu
-                        var startPoint = new DataPoint(startTime.ToOADate(), item.slstart);
+                        var startPoint = new DataPoint(
+                            startTime.ToOADate(),
+                            item.slstart
+                        );
+
                         SuCoSeries.Points.Add(startPoint);
 
-                        // Thêm điểm kết thúc
-                        SuCoSeries.Points.AddXY(endTime, item.slend);
-
-                        if (!string.IsNullOrEmpty(item.note) && startTime.ToOADate() >= chart1.ChartAreas[0].AxisX.Minimum
-                            && startTime.ToOADate() <= chart1.ChartAreas[0].AxisX.Maximum)
-                        {
-                            var offset = Math.Min(10, -startPoint.YValues[0] * 0.05);
-                            var callout = new CalloutAnnotation
-                            {
-                                Text = item.note,
-                                AnchorDataPoint = startPoint,
-                                AxisX = chart1.ChartAreas[0].AxisX,
-                                AxisY = chart1.ChartAreas[0].AxisY,
-                                ForeColor = Color.Black,
-                                BackColor = Color.White,
-                                LineColor = Color.Black,
-                                Width = 10,
-                                Height = 10,
-                                AnchorOffsetY = offset
-                            };
-
-                            // Thêm vào chart
-                            chart1.Annotations.Add(callout);
-
-                        }
-                        //SuCoSeries.Points.Add(startPoint);
-
-                        // Điểm kết thúc rỗng để ngắt vẽ
-                        var dungEnd = new DataPoint(endTime.ToOADate(), item.slend)
-                        {
-                            IsEmpty = true
-                        };
-                        SuCoSeries.Points.Add(dungEnd);
-                    }
-
-                    if (item.status == "MAY_DUNG" || item.status == "KHONG_CO_TRANG_THAI")
-                    {
-                        var startPoint = new DataPoint(startTime.ToOADate(), item.slstart);
-                        MAYDUNGSeries.Points.Add(startPoint);
-                        MAYDUNGSeries.Points.AddXY(endTime, item.slend);
+                        SuCoSeries.Points.AddXY(
+                            endTime.ToOADate(),
+                            item.slend
+                        );
 
                         if (!string.IsNullOrEmpty(item.note))
                         {
-                            var offset = Math.Min(10, -startPoint.YValues[0] * 0.05);
+                            var offset = Math.Min(
+                                10,
+                                -startPoint.YValues[0] * 0.05
+                            );
+
                             var callout = new CalloutAnnotation
                             {
                                 Text = item.note,
@@ -846,39 +830,83 @@ namespace WinformGoshi.Forms.Dashboard
                                 AnchorOffsetY = offset
                             };
 
-                            // Thêm vào chart
                             chart1.Annotations.Add(callout);
-
                         }
 
-                        var dungEnd = new DataPoint(endTime.ToOADate(), item.slend)
+                        SuCoSeries.Points.Add(new DataPoint(
+                            endTime.ToOADate(),
+                            item.slend
+                        )
                         {
-                            IsEmpty = true // Đảm bảo không vẽ thêm đoạn dư
-                        };
-                        MAYDUNGSeries.Points.Add(dungEnd);
+                            IsEmpty = true
+                        });
                     }
-                    // Gán label cho điểm cuối
-                    var dpEnd = new DataPoint(endTime.ToOADate(), item.slend)
-                    {
-                        //Label = item.slend.ToString()
-                    };
-                    ACTSeries.Points.Add(dpEnd);
 
-                    // Tạo custom label hiển thị trên trục X
+                    // ================= MÁY DỪNG =================
+
+                    if (item.status == "MAY_DUNG" ||
+                        item.status == "KHONG_CO_TRANG_THAI")
+                    {
+                        var startPoint = new DataPoint(
+                            startTime.ToOADate(),
+                            item.slstart
+                        );
+
+                        MAYDUNGSeries.Points.Add(startPoint);
+
+                        MAYDUNGSeries.Points.AddXY(
+                            endTime.ToOADate(),
+                            item.slend
+                        );
+
+                        if (!string.IsNullOrEmpty(item.note))
+                        {
+                            var offset = Math.Min(
+                                10,
+                                -startPoint.YValues[0] * 0.05
+                            );
+
+                            var callout = new CalloutAnnotation
+                            {
+                                Text = item.note,
+                                AnchorDataPoint = startPoint,
+                                AxisX = chart1.ChartAreas[0].AxisX,
+                                AxisY = chart1.ChartAreas[0].AxisY,
+                                ForeColor = Color.Black,
+                                BackColor = Color.White,
+                                LineColor = Color.Black,
+                                Width = 10,
+                                Height = 10,
+                                AnchorOffsetY = offset
+                            };
+
+                            chart1.Annotations.Add(callout);
+                        }
+
+                        MAYDUNGSeries.Points.Add(new DataPoint(
+                            endTime.ToOADate(),
+                            item.slend
+                        )
+                        {
+                            IsEmpty = true
+                        });
+                    }
+
+                    // ================= LABEL TRỤC X =================
+
                     var axisX2 = chart1.ChartAreas[0].AxisX;
-                    
+
                     var label = new CustomLabel
                     {
                         FromPosition = endTime.ToOADate() - 0.04,
                         ToPosition = endTime.ToOADate() + 0.04,
-                        Text = $"{endTime:HH:mm}" 
+                        Text = endTime.ToString("HH:mm")
                     };
+
                     axisX2.CustomLabels.Add(label);
 
                     timePointsACT.Add(endTime);
-                        
                 }
-
                 // Gợi ý thêm để hiển thị rõ ràng hơn:
                 var axX = chart1.ChartAreas[0].AxisX;
                 axX.LabelStyle.Angle = -90;
@@ -1219,6 +1247,7 @@ namespace WinformGoshi.Forms.Dashboard
                     }
                     double a = (timekt - timebd).TotalMinutes - 60;
                     double b = double.Parse(lbTotalACT.Text);
+                    double ct = double.Parse(txtCT.Text);
                     lbTiLeChayChuyen.Text = Math.Round((b*35 / (sumtimekh*60)) * 100, 1).ToString() + "%";
                     //lbTiLeChayChuyen.Text = Math.Round(((a - (sumCol2+ sumtgloi)) / (timekt - timebd).TotalSeconds) * 100, 1).ToString() + "%";
                     if (Math.Round((sumtimeact / 60), 0) > (timekt - timebd).TotalMinutes)
@@ -1234,6 +1263,48 @@ namespace WinformGoshi.Forms.Dashboard
             }
             catch (Exception ex) { }
 
+        }
+
+        private DateTime GetChartDate(DateTime curDay, TimeSpan time, TimeSpan shiftStart, TimeSpan shiftEnd)
+        {
+            bool isNightShift = shiftEnd < shiftStart;
+
+            if (isNightShift)
+            {
+                // Vì curDay là ngày kết thúc ca (sáng hôm sau), nên các giờ từ 18:40 đến 23:59 
+                // phải lùi về ngày hôm trước (-1 ngày)
+                if (time >= shiftStart)
+                {
+                    return curDay.Date.AddDays(-1).Add(time);
+                }
+                else
+                {
+                    // Các mốc từ 00:00 đến 06:00 sáng thuộc chính ngày kết thúc (curDay)
+                    return curDay.Date.Add(time);
+                }
+            }
+
+            // Ca ngày bình thường
+            return curDay.Date.Add(time);
+        }
+
+        private DateTime GetActualChartDate(
+            DateTime searchDate,
+            TimeSpan time,
+            TimeSpan shiftStart,
+            TimeSpan shiftEnd)
+        {
+            bool isNightShift = shiftEnd < shiftStart;
+
+            // Ngày được chọn (searchDate) là ngày kết thúc ca
+            // Do đó các mốc giờ từ lúc bắt đầu ca đến trước nửa đêm (>= shiftStart) sẽ thuộc ngày hôm trước (-1 ngày)
+            if (isNightShift && time >= shiftStart)
+            {
+                return searchDate.Date.AddDays(-1).Add(time);
+            }
+
+            // Các mốc giờ sau nửa đêm (< shiftStart) hoặc ca ngày bình thường thì giữ nguyên ngày searchDate
+            return searchDate.Date.Add(time);
         }
 
         public static DMStatusinfo CloneStatus(DMStatusinfo source)

@@ -17,20 +17,43 @@ namespace WinformGoshi.Sevices.dashboard
             string sql = "";
             List<DMTimeByCa> ret = new List<DMTimeByCa>();
             DateTime fromDate, toDate;
+            string timeToFrom = "00:00-00:00";
 
             // Các ca đêm: id 9, 10, 13, 14
             var nightShiftIds = new HashSet<int> { 9, 10, 13, 14 };
 
             if (nightShiftIds.Contains(id))
             {
-                fromDate = date.AddDays(-1).Date.AddHours(18); 
-                toDate = date.Date.AddHours(6);   
+                fromDate = date.AddDays(-1).Date.AddHours(18);
+                toDate = date.Date.AddHours(6);
             }
             else
             {
-                fromDate = date.Date.AddHours(6);        
-                toDate = date.Date.AddHours(18);     
+                fromDate = date.Date.AddHours(6);
+                toDate = date.Date.AddHours(18);
             }
+
+            try 
+            {
+                sql = $" select mondayhours from basic_shift where id = {id}";
+                using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            timeToFrom = reader.IsDBNull(0) ? "" : reader.GetString(0);
+                        }
+                        reader.Close();
+                        command.Dispose();
+                    }
+                }
+            } 
+            catch (Exception ex)
+            {
+
+            }
+
             DMTimeByCa item;
             try
             {
@@ -40,8 +63,8 @@ namespace WinformGoshi.Sevices.dashboard
                     " left join jointable_shift_shifttimetableexception t1 on t0.id = t1.shift_id " +
                     " left join basic_shifttimetableexception t2 on t1.shifttimetableexception_id = t2.id " +
                     " where t0.id = " + id;
-                    sql += " and t2.fromdate >= '" + fromDate + "' " +
-                    " and t2.fromdate <= '" + toDate + "' ";
+                    sql += $" and t2.fromdate >= '{fromDate.ToString("yyyy-MM-dd") + " " + timeToFrom.Split('-')[0]}' " +
+                    $" and t2.fromdate <= '{toDate.ToString("yyyy-MM-dd") + " " + timeToFrom.Split('-')[1]}' ";
 
                 sql += " order by t2.fromdate";
                 using (var command = new NpgsqlCommand(sql, Globals.NpgsqlConnection))
